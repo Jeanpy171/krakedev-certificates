@@ -4,7 +4,7 @@ export default {
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
-    "./node_modules/@nextui-org/theme/dist/components/(autocomplete|avatar|button|dropdown|input|navbar|ripple|spinner|form|listbox|divider|popover|scroll-shadow|menu).js"
+    "./node_modules/@nextui-org/theme/dist/components/(autocomplete|avatar|button|chip|dropdown|input|navbar|table|popover|ripple|spinner|form|listbox|divider|scroll-shadow|menu|checkbox|spacer).js"
   ],
   theme: {
     extend: {},

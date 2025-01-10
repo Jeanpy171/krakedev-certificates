@@ -12,10 +12,12 @@ import {
   DropdownItem,
 } from "@nextui-org/dropdown";
 import { Avatar } from "@nextui-org/avatar";
+import useAuth from "../../hooks/useAuth";
+import { Routes } from "../../navigation/routes";
 
 export const AcmeLogo = () => {
   return (
-    <svg fill="none" height="36" viewBox="0 0 32 32" width="36">
+    <svg fill="none" height="50" viewBox="0 0 32 32" width="50">
       <path
         clipRule="evenodd"
         d="M17.6482 10.1305L15.8785 7.02583L7.02979 22.5499H10.5278L17.6482 10.1305ZM19.8798 14.0457L18.11 17.1983L19.394 19.4511H16.8453L15.1056 22.5499H24.7272L19.8798 14.0457Z"
@@ -27,35 +29,27 @@ export const AcmeLogo = () => {
 };
 
 export default function MainNavbar() {
-  const isAdmin = false;
+  const { user } = useAuth();
+
   return (
-    <Navbar className="bg-red-300" maxWidth="full">
+    <Navbar className="bg-blue-300" maxWidth="full">
       <NavbarBrand>
         <AcmeLogo />
-        <p className="font-bold text-inherit">ACME</p>
       </NavbarBrand>
 
-      {isAdmin && (
+      {user && (
         <NavbarContent className="hidden sm:flex gap-4" justify="center">
-          <NavbarItem>
-            <Link color="foreground" to="#">
-              Features
-            </Link>
-          </NavbarItem>
-          <NavbarItem isActive>
-            <Link aria-current="page" color="secondary" to="#">
-              Customers
-            </Link>
-          </NavbarItem>
-          <NavbarItem>
-            <Link color="foreground" to="#">
-              Integrations
-            </Link>
-          </NavbarItem>
+          {Object.values(Routes.admin.routes).map((route) => (
+            <NavbarItem>
+              <Link color="foreground" to={route.path}>
+                {route.title}
+              </Link>
+            </NavbarItem>
+          ))}
         </NavbarContent>
       )}
 
-      {isAdmin && (
+      {user && (
         <NavbarContent as="div" justify="end">
           <Dropdown placement="bottom-end">
             <DropdownTrigger>
@@ -64,7 +58,7 @@ export default function MainNavbar() {
                 as="button"
                 className="transition-transform"
                 color="secondary"
-                name="Jason Hughes"
+                name={user.email ?? ""}
                 size="sm"
                 src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
               />

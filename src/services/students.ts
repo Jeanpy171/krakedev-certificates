@@ -1,28 +1,33 @@
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { Student } from "../interface/student";
-import { students } from "./students.mock";
+import { db } from "../firebase";
 
-export const searchByEmail = async (email: string): Promise<Student> => {
+export const handleGetAllStudents = async (): Promise<Student[]> => {
+  try {
+    const filter = query(collection(db, "students"))
+    const querySnapshot = await getDocs(filter)
+    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Student[]
+  } catch (error) {
+    console.log("Error al traer los estudiantes")
+    throw error
+  }
+};
+
+export const handleGetStudentByEmail = async (email: string) => {
   if (!email) {
-    throw new Error("Email must be provided");
+    throw new Error("Debes proporcionar el email");
   }
 
   try {
-    const studentsCollection = await handleFetchStudents();
-    const data = studentsCollection.find((student) => student.email === email);
-    console.log("DATA ENCONTRADA: ", data);
-    if (data) return data;
-
-    throw new Error("Email doesn't exist in DB");
+    const filter = query(collection(db, "students"), where("email", "==", email))
+    const querySnapshot = await getDocs(filter)
+    if (querySnapshot.empty) throw new Error("No se ha encontrado el correo electronico")
+    const { id, data } = querySnapshot.docs[0]
+    const studentDocument = { id, ...data() }
+    return studentDocument
   } catch (error) {
-    console.error("Error in searchByEmail:", error);
-    throw error;
+    console.log("Error al consultar la info del estudiante")
+    throw error
   }
-};
+}
 
-const handleFetchStudents = async (): Promise<Student[]> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(students);
-    }, 3500);
-  });
-};

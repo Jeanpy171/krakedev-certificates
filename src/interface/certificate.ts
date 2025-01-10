@@ -1,6 +1,6 @@
 export interface Certificate {
   id: string;
   name: string;
-  file: string;
+  url: string;
   created_at?: string;
 }
