@@ -6,67 +6,110 @@ import {
   TableBody,
   TableRow,
   TableCell,
+  TableProps,
 } from "@nextui-org/table";
-import { Tooltip } from "@nextui-org/tooltip";
-import { Chip } from "@nextui-org/chip";
+import { Student } from "../../../../../interface/student";
 
 export const columns = [
-  { name: "NAME", uid: "name" },
-  { name: "ROLE", uid: "role" },
-  { name: "STATUS", uid: "status" },
-  { name: "ACTIONS", uid: "actions" },
+  { name: "NOMBRES COMPLETOS", uid: "fullname" },
+  { name: "CORREO", uid: "email" },
+  { name: "EVENTO", uid: "event" },
+  { name: "TIPO", uid: "type" },
+  //{ name: "ACCIONES", uid: "actions" },
 ];
 
 export const users = [
   {
-    id: 1,
-    name: "Tony Reichert",
-    role: "CEO",
-    team: "Management",
-    status: "active",
-    age: "29",
-    avatar: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
+    id: "smasknmakjsncoajsncoias",
+    fullname: "Tony Reichert",
     email: "tony.reichert@example.com",
+    certificates: [
+      {
+        id: "oksncokasnclkasnlck",
+        event: "Intercolegial 2",
+        type: "Diploma una estrella",
+        url: "https://cdn.slidesharecdn.com/ss_thumbnails/plantillas-de-diplomas-1-240311145109-bf52008b-thumbnail.jpg?width=640&height=640&fit=bounds",
+        created_at: "ksdmfksdmcklsdmclksmdclksd",
+      },
+      {
+        id: "fghfghfghfghfghfgh",
+        event: "Intercolegial 3",
+        type: "Diploma dos estrella",
+        url: "https://cdn.slidesharecdn.com/ss_thumbnails/plantillas-de-diplomas-1-240311145109-bf52008b-thumbnail.jpg?width=640&height=640&fit=bounds",
+        created_at: "ksdmfksdmcklsdmclksmdclksd",
+      },
+      {
+        id: "jhjghjghjghjgh",
+        event: "Intercolegial 4",
+        type: "Diploma dos estrella",
+        url: "https://cdn.slidesharecdn.com/ss_thumbnails/plantillas-de-diplomas-1-240311145109-bf52008b-thumbnail.jpg?width=640&height=640&fit=bounds",
+        created_at: "ksdmfksdmcklsdmclksmdclksd",
+      },
+      {
+        id: "dfvdfvdfvdfvdf",
+        event: "Intercolegial 5",
+        type: "Diploma dos estrella",
+        url: "https://cdn.slidesharecdn.com/ss_thumbnails/plantillas-de-diplomas-1-240311145109-bf52008b-thumbnail.jpg?width=640&height=640&fit=bounds",
+        created_at: "ksdmfksdmcklsdmclksmdclksd",
+      },
+      
+    ],
   },
   {
-    id: 2,
-    name: "Zoey Lang",
-    role: "Technical Lead",
-    team: "Development",
-    status: "paused",
-    age: "25",
-    avatar: "https://i.pravatar.cc/150?u=a042581f4e29026704d",
-    email: "zoey.lang@example.com",
+    id: "asd3wqs34rf44t",
+    fullname: "Tony Reichert",
+    email: "tony.reichert@example.com",
+    certificates: [
+      {
+        id: "oksncokasnclkasnlck",
+        event: "Intercolegial 2",
+        type: "Diploma una estrella",
+        url: "https://cdn.slidesharecdn.com/ss_thumbnails/plantillas-de-diplomas-1-240311145109-bf52008b-thumbnail.jpg?width=640&height=640&fit=bounds",
+        created_at: "ksdmfksdmcklsdmclksmdclksd",
+      },
+    ],
   },
   {
-    id: 3,
-    name: "Jane Fisher",
-    role: "Senior Developer",
-    team: "Development",
-    status: "active",
-    age: "22",
-    avatar: "https://i.pravatar.cc/150?u=a04258114e29026702d",
-    email: "jane.fisher@example.com",
+    id: "yjh7jj67j67u67",
+    fullname: "Tony Reichert",
+    email: "tony.reichert@example.com",
+    certificates: [
+      {
+        id: "oksncokasnclkasnlck",
+        event: "Intercolegial 2",
+        type: "Diploma una estrella",
+        url: "https://cdn.slidesharecdn.com/ss_thumbnails/plantillas-de-diplomas-1-240311145109-bf52008b-thumbnail.jpg?width=640&height=640&fit=bounds",
+        created_at: "ksdmfksdmcklsdmclksmdclksd",
+      },
+    ],
   },
   {
-    id: 4,
-    name: "William Howard",
-    role: "Community Manager",
-    team: "Marketing",
-    status: "vacation",
-    age: "28",
-    avatar: "https://i.pravatar.cc/150?u=a048581f4e29026701d",
-    email: "william.howard@example.com",
+    id: "sdcsew4etg5g5",
+    fullname: "Tony Reichert",
+    email: "tony.reichert@example.com",
+    certificates: [
+      {
+        id: "oksncokasnclkasnlck",
+        event: "Intercolegial 2",
+        type: "Diploma una estrella",
+        url: "https://cdn.slidesharecdn.com/ss_thumbnails/plantillas-de-diplomas-1-240311145109-bf52008b-thumbnail.jpg?width=640&height=640&fit=bounds",
+        created_at: "ksdmfksdmcklsdmclksmdclksd",
+      },
+    ],
   },
   {
-    id: 5,
-    name: "Kristen Copper",
-    role: "Sales Manager",
-    team: "Sales",
-    status: "active",
-    age: "24",
-    avatar: "https://i.pravatar.cc/150?u=a092581d4ef9026700d",
-    email: "kristen.cooper@example.com",
+    id: "yjtyjtyjtyjt6u6",
+    fullname: "Tony Reichert",
+    email: "tony.reichert@example.com",
+    certificates: [
+      {
+        id: "oksncokasnclkasnlck",
+        event: "Intercolegial 2",
+        type: "Diploma una estrella",
+        url: "https://cdn.slidesharecdn.com/ss_thumbnails/plantillas-de-diplomas-1-240311145109-bf52008b-thumbnail.jpg?width=640&height=640&fit=bounds",
+        created_at: "ksdmfksdmcklsdmclksmdclksd",
+      },
+    ],
   },
 ];
 
@@ -191,66 +234,89 @@ export const EditIcon = (props) => {
   );
 };
 
-const statusColorMap = {
-  active: "success",
-  paused: "danger",
-  vacation: "warning",
-};
+interface CustomTableProps extends TableProps {
+  //handleOnChange: (arg0: { data: Student; action: Action }) => void;
+  handleOnChange: (arg0: Student) => void;
+}
 
-export default function TableStudent() {
+export default function TableStudent({
+  handleOnChange,
+  ...props
+}: CustomTableProps) {
   const renderCell = React.useCallback((user, columnKey) => {
     const cellValue = user[columnKey];
 
     switch (columnKey) {
       case "name":
         return <p>{user.email}</p>;
-      case "role":
+      case "event":
         return (
-          <div className="flex flex-col">
-            <p className="text-bold text-sm capitalize">{cellValue}</p>
-            <p className="text-bold text-sm capitalize text-default-400">
-              {user.team}
-            </p>
-          </div>
+          <p>
+            {user.certificates.map((certificate) => (
+              <p>{certificate.event}</p>
+            ))}
+          </p>
         );
-      case "status":
+      case "type":
         return (
-          <Chip
-            className="capitalize"
-            color={statusColorMap[user.status]}
-            size="sm"
-            variant="flat"
-          >
-            {cellValue}
-          </Chip>
+          <p>
+            {user.certificates.map((certificate) => (
+              <p>{certificate.type}</p>
+            ))}
+          </p>
         );
-      case "actions":
-        return (
-          <div className="relative flex items-center gap-2">
-            <Tooltip content="Details">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                <EyeIcon />
-              </span>
-            </Tooltip>
-            <Tooltip content="Edit user">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                <EditIcon />
-              </span>
-            </Tooltip>
-            <Tooltip color="danger" content="Delete user">
-              <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                <DeleteIcon />
-              </span>
-            </Tooltip>
-          </div>
-        );
+      // case "actions":
+      //   return (
+      //     <div className="relative flex items-center gap-2">
+      //       <Tooltip content="Details">
+      //         <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+      //           <EyeIcon
+      //             onClick={() =>
+      //               handleOnChange({ data: user, action: Action.view })
+      //             }
+      //           />
+      //         </span>
+      //       </Tooltip>
+      //       <Tooltip content="Edit user">
+      //         <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+      //           <EditIcon
+      //             onClick={() =>
+      //               handleOnChange({ data: user, action: Action.edit })
+      //             }
+      //           />
+      //         </span>
+      //       </Tooltip>
+      //       <Tooltip color="danger" content="Delete user">
+      //         <span className="text-lg text-danger cursor-pointer active:opacity-50">
+      //           <DeleteIcon
+      //             onClick={() =>
+      //               handleOnChange({ data: user, action: Action.delete })
+      //             }
+      //           />
+      //         </span>
+      //       </Tooltip>
+      //     </div>
+      //   );
       default:
         return cellValue;
     }
   }, []);
 
   return (
-    <Table aria-label="Example table with custom cells">
+    <Table
+      {...props}
+      selectionMode="single"
+      onSelectionChange={(e) => {
+        for (const item of e) {
+          const selectedStudent = users.find((user) => user.id === item);
+          if (selectedStudent) handleOnChange(selectedStudent);
+        }
+        // const array = Array.from(e);
+        // console.log(array);
+        //console.warn(e)
+      }}
+      aria-label="Example table with custom cells"
+    >
       <TableHeader columns={columns}>
         {(column) => (
           <TableColumn

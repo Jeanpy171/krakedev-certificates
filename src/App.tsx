@@ -5,15 +5,15 @@ function App() {
   return (
     <Providers>
       <Router />
-    </Providers>
-  );
+    </Providers>)
+
 }
 
 export default App;
 // import React, { useState, useEffect, useRef } from "react";
 // import { PDFDocument, rgb } from "pdf-lib";
 // import { saveAs } from "file-saver"; // Para la descarga del PDF
-// import certificate from "./certificado.pdf";
+// import certificate from "./tercer_intercolegial.pdf";
 
 // const PdfEditor = () => {
 //   const [text, setText] = useState<string>("JEAN PIERRE FUENTES MEZA"); // Texto a escribir en el PDF
@@ -37,7 +37,7 @@ export default App;
 
 //       // Coordenadas del centro (sin cambiar tamaño de texto)
 //       const centerX = width / 2;
-//       const centerY = height / 1.92; // Coordenada Y del centro
+//       const centerY = height / 2; // Coordenada Y del centro
 
 //       // Si no se han establecido coordenadas manualmente, usar el centro como predeterminado
 
@@ -119,7 +119,6 @@ export default App;
 //             <iframe
 //               ref={iframeRef}
 //               src={pdfUrl + '#toolbar=0&navpanes=0&scrollbar=0"'}
-
 //               width="100%"
 //               height="100%" // Cambié de 400 a 100% para que ocupe todo el alto disponible
 //               title="PDF Preview"

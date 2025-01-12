@@ -5,25 +5,26 @@ import withAuth from "../hoc/withAuth";
 import SignIn from "../pages/public/sign-in/sign-in";
 import { ListStudents } from "../pages/admin/list-students/list-students";
 import { Templates } from "../pages/admin/templates/templates";
+import AdminLayout from "../layout/admin-layout";
 
 export const Routes = {
 
   admin: {
     path: "/admin/",
-    layout: withAuth(MainLayout),
+    layout: withAuth(AdminLayout),
     routes: {
       dashboard: {
-        title: "administrador",
+        title: "Registros",
         path: "",
         element: ListStudents,
       },
       task: {
-        title: "tareas",
+        title: "Tareas",
         path: "task",
         element: (() => <div>Tareas</div>),
       },
       templates:{
-        title: "Plantillas",
+        title: "Certificaciones",
         path: "templates",
         element: Templates,
       }
