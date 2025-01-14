@@ -1,10 +1,4 @@
-import {
-  Navbar,
-  NavbarBrand,
-  NavbarContent,
-  NavbarItem,
-} from "@nextui-org/navbar";
-import { Link } from "react-router-dom";
+import { Navbar, NavbarBrand, NavbarContent } from "@nextui-org/navbar";
 import {
   Dropdown,
   DropdownTrigger,
@@ -13,42 +7,17 @@ import {
 } from "@nextui-org/dropdown";
 import { Avatar } from "@nextui-org/avatar";
 import useAuth from "../../hooks/useAuth";
-import { Routes } from "../../navigation/routes";
-
-export const AcmeLogo = () => {
-  return (
-    <svg fill="none" height="50" viewBox="0 0 32 32" width="50">
-      <path
-        clipRule="evenodd"
-        d="M17.6482 10.1305L15.8785 7.02583L7.02979 22.5499H10.5278L17.6482 10.1305ZM19.8798 14.0457L18.11 17.1983L19.394 19.4511H16.8453L15.1056 22.5499H24.7272L19.8798 14.0457Z"
-        fill="currentColor"
-        fillRule="evenodd"
-      />
-    </svg>
-  );
-};
+import { handleLogout } from "../../services/auth";
+import krakedevHorizontal from "../../assets/krakedev-horizontal.png";
 
 export default function MainNavbar() {
   const { user } = useAuth();
 
   return (
-    <Navbar className="bg-blue-300" maxWidth="full">
+    <Navbar className="bg-purple-500 " maxWidth="full">
       <NavbarBrand>
-        <AcmeLogo />
+        <img src={krakedevHorizontal} className="object-contain w-36 h-32" />
       </NavbarBrand>
-
-      {user && (
-        <NavbarContent className="hidden sm:flex gap-4" justify="center">
-          {Object.values(Routes.admin.routes).map((route) => (
-            <NavbarItem>
-              <Link color="foreground" to={route.path}>
-                {route.title}
-              </Link>
-            </NavbarItem>
-          ))}
-        </NavbarContent>
-      )}
-
       {user && (
         <NavbarContent as="div" justify="end">
           <Dropdown placement="bottom-end">
@@ -65,19 +34,10 @@ export default function MainNavbar() {
             </DropdownTrigger>
             <DropdownMenu aria-label="Profile Actions" variant="flat">
               <DropdownItem key="profile" className="h-14 gap-2">
-                <p className="font-semibold">Signed in as</p>
-                <p className="font-semibold">zoey@example.com</p>
+                <p className="font-semibold">{user.email}</p>
               </DropdownItem>
-              <DropdownItem key="settings">My Settings</DropdownItem>
-              <DropdownItem key="team_settings">Team Settings</DropdownItem>
-              <DropdownItem key="analytics">Analytics</DropdownItem>
-              <DropdownItem key="system">System</DropdownItem>
-              <DropdownItem key="configurations">Configurations</DropdownItem>
-              <DropdownItem key="help_and_feedback">
-                Help & Feedback
-              </DropdownItem>
-              <DropdownItem key="logout" color="danger">
-                Log Out
+              <DropdownItem key="logout" color="danger" onPress={handleLogout}>
+                Salir
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>

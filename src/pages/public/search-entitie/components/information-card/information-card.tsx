@@ -8,7 +8,7 @@ const InformationCard = () => {
         <h3 className="font-bold text-white">INFORMACION</h3>
       </span>
       <p className="text-lg font-medium">
-        Ingrese la Cédula/nombres completos y presione el botón: "
+        Ingrese el correo electrónico y presione el botón: "
         <strong>Buscar</strong>", para obtener tu certificado de participación
       </p>
     </article>

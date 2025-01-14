@@ -1,8 +1,8 @@
+import { Template } from "./template";
+
 export interface Certificate {
   id: string;
-  event: string;
-  type: string;
-  file?: { path: string; file: File } | null;
-  url?: string | null;
-  created_at?: string;
+  name: string;
+  templates: Template[];
+  created_at: string;
 }

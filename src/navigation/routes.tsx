@@ -4,31 +4,30 @@ import MainLayout from "../layout/mainLayout";
 import withAuth from "../hoc/withAuth";
 import SignIn from "../pages/public/sign-in/sign-in";
 import { ListStudents } from "../pages/admin/list-students/list-students";
-import { Templates } from "../pages/admin/templates/templates";
 import AdminLayout from "../layout/admin-layout";
+import { Certificates } from "../pages/admin/certificates/certificates";
+import Task from "../pages/admin/tasks/task";
 
 export const Routes = {
-
   admin: {
     path: "/admin/",
     layout: withAuth(AdminLayout),
     routes: {
-      dashboard: {
-        title: "Registros",
-        path: "",
+      students: {
+        title: "Estudiantes",
+        path: "students",
         element: ListStudents,
       },
       task: {
         title: "Tareas",
         path: "task",
-        element: (() => <div>Tareas</div>),
+        element: Task,
       },
-      templates:{
+      templates: {
         title: "Certificaciones",
-        path: "templates",
-        element: Templates,
-      }
-      
+        path: "certificates",
+        element: Certificates,
+      },
     },
   },
   public: {
@@ -45,11 +44,11 @@ export const Routes = {
         path: "certificados",
         element: ViewCertificate,
       },
-      signin:{
+      signin: {
         title: "acceder",
         path: "signin",
         element: SignIn,
-      }
+      },
     },
   },
 };

@@ -1,8 +1,8 @@
-import { Certificate } from "./certificate";
+import { Template } from "./template";
 
 export interface School {
   id: string;
   name: string;
-  certificates: Certificate[] | null;
+  certificates: Template[] | null;
   created_at: string;
 }

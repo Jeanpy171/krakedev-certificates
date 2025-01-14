@@ -1,11 +1,6 @@
-import {
-  createBrowserRouter,
-  Outlet,
-  RouteObject,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Outlet, RouteObject } from "react-router-dom";
 import { Routes } from "./routes";
-//import PageNotFound from "../page/PageNotFound";
+import AuthLayout from "../layout/auth-layout";
 
 const RouteObjects: Array<RouteObject> = Object.values(Routes).map((e) => ({
   path: e.path,
@@ -23,16 +18,12 @@ const RouteObjects: Array<RouteObject> = Object.values(Routes).map((e) => ({
 const router = createBrowserRouter([
   {
     path: "/",
-    element: (
-      <div className="w-screen">
-        <Outlet />
-      </div>
-    ),
+    element: <AuthLayout />, 
     children: [
       ...RouteObjects,
       {
         path: "*",
-        element: <div>LA RUTA NO EXISTE</div>,
+        element: <div>La ruta no existe</div>,
       },
     ],
   },

@@ -33,7 +33,6 @@ export default function Dropzone({
   multiple = false,
   disabled = false,
 }: DropzoneProps) {
-    console.warn("ESTO ESTA EN FILE: ", file)
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
       handleReaderFiles(acceptedFiles);

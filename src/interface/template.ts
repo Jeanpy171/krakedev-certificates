@@ -1,8 +1,8 @@
-import { Certificate } from "./certificate"
-
 export interface Template {
-    id: string
-    name: string
-    certificates: Certificate[]
-    created_at: string
+  id: string;
+  certificate: string;
+  range: string;
+  file?: { path: string; file: File } | null;
+  url?: string | null;
+  created_at?: string;
 }

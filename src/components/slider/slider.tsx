@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
+import krakedevLetters from "../../assets/krakedev-letters.png";
+import interschool_3 from "../../assets/interschool-3.png";
 
-const slides = [
-  "https://images-ng.pixai.art/images/thumb/624f290c-a319-44b4-a57f-741da2157ffe",
-  "https://s1.zerochan.net/Ganyu.600.3926887.jpg",
-  "https://i.ebayimg.com/images/g/IGEAAOSwuVJkvH79/s-l1200.png",
-];
+const slides = [krakedevLetters, interschool_3];
 
 export default function Slider() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -30,30 +28,38 @@ export default function Slider() {
     setCurrentSlide(index);
   };
 
+  const buttonSliderClassname =
+    "absolute top-1/2 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white p-2 w-10 rounded-full hover:bg-opacity-75";
+
   return (
     <article className="relative w-full h-full overflow-hidden flex justify-center items-center">
-      {slides.map((slide, index) => (
-        <img
-          key={index}
-          src={slide}
-          alt={`Slide ${index + 1}`}
-          className={`absolute top-0 left-0 w-full h-full object-contain transition-opacity duration-1000 ${
-            index === currentSlide ? "opacity-100" : "opacity-0"
-          }`}
-        />
-      ))}
-
-      <button
-        onClick={handlePrev}
-        className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-70"
+      <ul
+        className="relative w-full h-full transition-transform duration-700 ease-in-out"
+        style={{
+          transform: `translateX(-${currentSlide * 100}%)`,
+        }}
       >
+        {slides.map((slide, index) => (
+          <li
+            key={slide + "_" + index}
+            className="absolute top-0 left-0 w-full h-full"
+            style={{
+              transform: `translateX(${index * 100}%)`,
+            }}
+          >
+            <img
+              src={slide}
+              alt={`Slide ${index + 1}`}
+              className="w-full h-full object-contain"
+            />
+          </li>
+        ))}
+      </ul>
+
+      <button onClick={handlePrev} className={buttonSliderClassname + " left-4"}>
         &#8249;
       </button>
-
-      <button
-        onClick={handleNext}
-        className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-70"
-      >
+      <button onClick={handleNext} className={buttonSliderClassname + " right-4"}>
         &#8250;
       </button>
 
