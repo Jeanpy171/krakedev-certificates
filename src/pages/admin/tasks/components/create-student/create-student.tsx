@@ -37,7 +37,7 @@ const CreateStudent = () => {
         id_template: selectedTypeTemplate?.id ?? "",
         created_at: getCurrentDate(),
       };
-      const newStudent = { ...student, certificate };
+      const newStudent = { ...student, ...certificate };
 
       console.warn("ESTO VOY A GUARDAR EN FIREBASE: ", newStudent);
       await handleCreateStudent(newStudent);
