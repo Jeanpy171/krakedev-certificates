@@ -25,8 +25,17 @@ const useCertificateStore = create<CertificateStore>((set) => ({
 
     try {
       const response = await handleGetAllCertificates();
-      set({ certificates: response, isLoadingCertificates: false });
+      if (Array.isArray(response)) {
+        set({ certificates: response, isLoadingCertificates: false });
+      } else {
+        set({
+          certificates: [],
+          isLoadingCertificates: false,
+          errorCertificates: "No se encontraron certificados disponibles",
+        });
+      }
     } catch (error) {
+      console.error("Error al cargar los certificados: " + error);
       set({
         errorCertificates: "Error al cargar los certificados: " + error,
         isLoadingCertificates: false,

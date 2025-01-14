@@ -5,4 +5,5 @@ export interface Certificate {
   name: string;
   templates: Template[];
   created_at: string;
+  is_active: boolean;
 }

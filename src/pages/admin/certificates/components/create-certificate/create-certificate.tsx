@@ -15,6 +15,7 @@ const CreateCertificate = () => {
     name: "",
     created_at: new Date().toISOString(),
     templates: [],
+    is_active: true,
   });
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { setCertificates, certificates } = useCertificateStore();
@@ -73,11 +74,25 @@ const CreateCertificate = () => {
     handleOnChange("templates", newTemplate);
   };
 
-  const handleUploadTemplate = async () => {
-    if (!certificate) return;
+  const handleUploadCertificate = async () => {
+    if (!certificate?.name || certificate.templates.length === 0) {
+      toast.error(
+        "Debe proporcionar el nombre y las plantillas de la certificacion"
+      );
+      return;
+    }
+
+    const validateTemplatesName = certificate.templates.some(
+      (template) => template.range === "" || !template.file
+    );
+
+    if (validateTemplatesName) {
+      toast.error("Debe proporcionar el tipo y el pdf de cada plantilla");
+      return;
+    }
 
     setIsLoading(true);
-    console.warn("ESTA ES LA PLANTILLA QUE VOY A SUBIR: ", certificate);
+    console.warn("ESTA ES EL CERTIFICADO QUE VOY A SUBIR: ", certificate);
 
     try {
       await handleCreateCertificate(certificate);
@@ -87,6 +102,7 @@ const CreateCertificate = () => {
         name: "",
         created_at: new Date().toISOString(),
         templates: [],
+        is_active: true,
       });
       //fetchCertificates();
       setCertificates([...certificates, certificate]);
@@ -111,7 +127,7 @@ const CreateCertificate = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4 justify-start items-start p-10 w-full">
+    <div className="flex flex-col gap-4 justify-start items-start w-full">
       <article className="flex gap-5 w-full justify-center items-center">
         <Input
           label="Nombre del certificado"
@@ -123,7 +139,7 @@ const CreateCertificate = () => {
           isDisabled={isLoading}
           isLoading={isLoading}
           color="success"
-          onClick={handleUploadTemplate}
+          onPress={handleUploadCertificate}
         >
           Crear
         </Button>

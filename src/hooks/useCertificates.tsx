@@ -7,13 +7,13 @@ export default function useCertificates() {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    handleSetTemplates();
+    handleSetCertificates();
   }, []);
 
-  const handleSetTemplates = async () => {
+  const handleSetCertificates = async () => {
     setIsLoading(true);
     const certificates = await handleGetAllCertificates();
-    setCertificates(certificates);
+    setCertificates(certificates || []);
     setIsLoading(false);
   };
 

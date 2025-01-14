@@ -1,6 +1,5 @@
 import {
   collection,
-  deleteDoc,
   doc,
   getDocs,
   query,
@@ -13,17 +12,21 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { Certificate } from "../interface/certificate";
 import { getCurrentDate } from "../utils/date";
 
-export const handleGetAllCertificates = async (): Promise<Certificate[]> => {
+export const handleGetAllCertificates = async (): Promise<
+  Certificate[] | null
+> => {
   try {
     const filter = query(collection(db, "certificates"));
     const querySnapshot = await getDocs(filter);
+    if (querySnapshot.empty) throw "No hay certificados disponibles";
     return querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     })) as Certificate[];
   } catch (error) {
-    console.log("Error al traer todas las plantillas");
-    throw error;
+    console.log("Error al traer todas los certificados" + error);
+    return null;
+    //throw new Error("Error al traer todas los certificados");
   }
 };
 
@@ -89,6 +92,7 @@ export const handleCreateCertificate = async (certificate: Certificate) => {
 
     const certificateWithTemplates = {
       ...certificate,
+      is_active: true,
       templates: updatedCertificates,
     };
     const certificateRef = doc(db, "certificates", certificate.id);
@@ -138,7 +142,7 @@ export const handleUpdateCertificate = async (
           const updatedTemplate = {
             ...template,
             name: updateCertificate.name,
-            url: pdfUrl || template.url, 
+            url: pdfUrl || template.url,
           };
           delete updatedTemplate.file;
 
@@ -185,10 +189,16 @@ export const uploadPdfToFirebase = async (
   }
 };
 
-
-export const handleDeleteCertificate = async (id: string): Promise<void> => {
+export const handleUpdateStateCertificate = async (
+  id: string,
+  state: boolean
+): Promise<void> => {
   try {
-    await deleteDoc(doc(db, "certificates", id));
+    //await deleteDoc(doc(db, "certificates", id));
+    await updateDoc(doc(db, "certificates", id), {
+      is_active: state,
+      updated_at: getCurrentDate(),
+    });
   } catch (error) {
     console.error("Error al eliminar la certificacion:", error);
     throw error;

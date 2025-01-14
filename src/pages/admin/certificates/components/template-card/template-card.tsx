@@ -68,10 +68,10 @@ const TemplateCard = ({
         className="flex w-full h-full rounded-md justify-center items-center bg-gray-300 "
         disabled={false}
       >
-        {template.url || template.file ? (
-          <CertificateVisualizer url={template.url || template.file?.path} />
+        {template.file?.path || template.url ? (
+          <CertificateVisualizer url={template.file?.path || template.url} />
         ) : (
-          <p>No PDF selected</p>
+          <p>No se ha seleccionado un PDF</p>
         )}
       </Dropzone>
     </li>

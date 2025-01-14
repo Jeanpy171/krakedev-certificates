@@ -26,8 +26,7 @@ export const ListStudents = () => {
 
   const [searchName, setSearchName] = useState<string>("");
   const debouncedSearchName = useDebounce(searchName, 500);
-  const { fetchCertificates, isLoadingCertificates, errorCertificates } =
-    useCertificateStore();
+  const { fetchCertificates, isLoadingCertificates } = useCertificateStore();
 
   useEffect(() => {
     fetchCertificates();
@@ -35,15 +34,21 @@ export const ListStudents = () => {
 
   useEffect(() => {
     console.warn("DEOUNCE EN PAGINATION: ", debouncedSearchName);
-    if (debouncedSearchName === null || debouncedSearchName === "") {
+    if (
+      debouncedSearchName === null ||
+      debouncedSearchName === "" ||
+      debouncedSearchName === " "
+    ) {
       fetchStudentsWithPagination(10);
     }
-  }, [debouncedSearchName, fetchStudentsWithPagination]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedSearchName]);
 
   useEffect(() => {
     console.warn("DEOUNCE: ", debouncedSearchName);
     searchStudents(debouncedSearchName);
-  }, [debouncedSearchName, searchStudents]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedSearchName]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchName(e.target.value);
@@ -79,8 +84,19 @@ export const ListStudents = () => {
     handleUpdateStudents(updateStudents);
   };
 
-  if (isLoadingCertificates) return <p>Cargando estudiantes...</p>;
-  if (errorCertificates) return <p>Error: {errorCertificates}</p>;
+  const handleUpdateMasiveStudents = () => {
+    // const updateStudents = [...students, ...newStudents];
+    // handleUpdateStudents(updateStudents);
+    console.warn("LLAMANDO A PAGINACXION POR MASIVO ------");
+    fetchStudentsWithPagination(10);
+  };
+
+  if (isLoadingCertificates)
+    return (
+      <article className="w-full h-full flex justify-center items-center">
+        <p>Cargando estudiantes...</p>
+      </article>
+    );
 
   return (
     <main className="p-5 flex flex-col gap-5">
@@ -97,6 +113,7 @@ export const ListStudents = () => {
       </article>
       <MasiveCreationModal
         isOpen={isOpen}
+        handleUpdateMasiveStudents={handleUpdateMasiveStudents}
         onOpenChange={onOpenChange}
         scrollBehavior="inside"
         size="5xl"

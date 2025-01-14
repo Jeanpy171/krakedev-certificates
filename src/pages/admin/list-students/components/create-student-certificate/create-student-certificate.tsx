@@ -93,6 +93,7 @@ const CreateStudentCertificate = ({
       <AsideLayout>
         <div className="flex flex-col gap-5">
           <InputCertificates
+            filterByActive={true}
             value={selectedCertificate?.name}
             onSelectionChange={setSelectedCertificate}
           />
@@ -110,7 +111,9 @@ const CreateStudentCertificate = ({
           )}
           <Button
             isLoading={isLoading}
-            isDisabled={isLoading}
+            isDisabled={
+              isLoading || !selectedCertificate || !selectedTypeTemplate
+            }
             color="primary"
             onPress={handleCreateStudentCertificate}
           >

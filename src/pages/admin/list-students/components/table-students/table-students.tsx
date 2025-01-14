@@ -111,7 +111,7 @@ export default function TableStudent({
       bottomContent={
         hasMore && !isLoading ? (
           <div className="flex w-full justify-center">
-            {hasMore && (
+            {hasMore && data && (
               <Button isDisabled={isLoading} variant="flat" onPress={loadMore}>
                 {isLoading && <Spinner color="white" size="sm" />}
                 Cargar mas

@@ -87,6 +87,7 @@ const CreateStudent = () => {
             }
           />
           <InputCertificates
+            filterByActive={true}
             value={selectedCertificate?.name}
             onSelectionChange={setSelectedCertificate}
           />

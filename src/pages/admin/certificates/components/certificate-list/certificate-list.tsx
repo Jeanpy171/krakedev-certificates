@@ -6,7 +6,10 @@ import { Certificate } from "../../../../../interface/certificate";
 import { Template } from "../../../../../interface/template";
 import TemplateList from "../template-list/template-list";
 import { InputCertificates } from "../input-certificate/input-certificate";
-import { handleDeleteCertificate, handleUpdateCertificate } from "../../../../../services/certificates";
+import {
+  handleUpdateCertificate,
+  handleUpdateStateCertificate,
+} from "../../../../../services/certificates";
 import useCertificateStore from "../../../../../store/certificates";
 import { toast } from "sonner";
 
@@ -14,6 +17,7 @@ const CertificateList = () => {
   const [selectedCertificate, setSelectedCertificate] =
     useState<Certificate | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingDelete, setIsLoadingDelete] = useState(false);
   const { fetchCertificates, certificates, setCertificates } =
     useCertificateStore();
 
@@ -79,8 +83,27 @@ const CertificateList = () => {
   };
 
   const handleUpdate = async () => {
-    if (!selectedCertificate?.id) return;
-    setIsLoading(true);
+    if (
+      !selectedCertificate?.name ||
+      selectedCertificate.templates.length === 0 ||
+      !selectedCertificate.id
+    ) {
+      toast.error(
+        "Debe proporcionar el nombre y las plantillas de la certificacion que quieres actualizar"
+      );
+      return;
+    }
+
+    const validateTemplatesName = selectedCertificate.templates.some(
+      (template) => template.range === "" || !template.file
+    );
+
+    if (validateTemplatesName) {
+      toast.error("Debe proporcionar el tipo y el pdf de cada plantilla");
+      return;
+    }
+
+    //setIsLoading(true);
     console.warn("ESTA ES LA PLANTILLA QUE VOY A SUBIR: ", selectedCertificate);
     try {
       await handleUpdateCertificate(selectedCertificate?.id, {
@@ -99,13 +122,23 @@ const CertificateList = () => {
     }
   };
 
-  const handleDeleteCertificateData = async () => {
-    if(!selectedCertificate?.id) throw new Error("Necesitas enviar el id de la certificacion")
+  const handleChangeStateCertificate = async (state: boolean) => {
+    if (!selectedCertificate?.id)
+      throw new Error("Necesitas enviar el id de la certificacion");
+    setIsLoadingDelete(true);
     try {
-      await handleDeleteCertificate(selectedCertificate?.id);
-      const updateCertificates = certificates.filter(
-        (certificate) => certificate.id !== selectedCertificate?.id
+      await handleUpdateStateCertificate(selectedCertificate?.id, state);
+      // const updateCertificates = certificates.filter(
+      //   (certificate) => certificate.id !== selectedCertificate?.id
+      // );
+      const updateCertificates = [...certificates];
+      const filterById = updateCertificates.findIndex(
+        (certificate) => certificate.id === selectedCertificate?.id
       );
+      updateCertificates[filterById] = {
+        ...updateCertificates[filterById],
+        is_active: false,
+      };
       setCertificates(updateCertificates);
       toast.success("Certificacion eliminada correctamente");
       setSelectedCertificate(null);
@@ -113,6 +146,8 @@ const CertificateList = () => {
       console.log(error);
       toast.success("Error al eliminar la certificacion");
       throw error;
+    } finally {
+      setIsLoadingDelete(false);
     }
   };
 
@@ -120,21 +155,37 @@ const CertificateList = () => {
     <section className="flex flex-col gap-5">
       <article className="flex gap-4 justify-between items-center">
         <InputCertificates
+          filterByActive={false}
           value={selectedCertificate?.name}
           onSelectionChange={setSelectedCertificate}
           className="w-1/2"
         />
-        {selectedCertificate && (
+        {selectedCertificate?.is_active ? (
           <Button
-            isLoading={isLoading}
-            isDisabled={isLoading}
-            onPress={handleDeleteCertificateData}
+            isLoading={isLoadingDelete}
+            isDisabled={isLoadingDelete}
+            onPress={() => handleChangeStateCertificate(false)}
             color="danger"
           >
-            Eliminar certificacion
+            Desactivar certificacion
+          </Button>
+        ) : (
+          <Button
+            isLoading={isLoadingDelete}
+            isDisabled={isLoadingDelete}
+            onPress={() => handleChangeStateCertificate(true)}
+            color="success"
+          >
+            Activar certificacion
           </Button>
         )}
       </article>
+      {selectedCertificate && !selectedCertificate?.is_active && (
+        <p className="text-red-400 font-semibold">
+          Esta certificacion fue eliminada, para poder asignarla a un
+          estudiante, debes actualizarla
+        </p>
+      )}
       <article className="overflow-y-auto w-full grid gap-5 grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))]">
         {selectedCertificate?.templates ? (
           <span className="flex flex-col gap-5">
@@ -171,7 +222,7 @@ const CertificateList = () => {
           </span>
         ) : (
           <p>
-            Selecciona una plantilla para visualizar el tipo de certificaciones
+            Selecciona una certificacion para visualizar las plantillas adjuntas
           </p>
         )}
       </article>

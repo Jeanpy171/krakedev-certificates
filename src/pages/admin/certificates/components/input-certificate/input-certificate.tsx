@@ -3,7 +3,7 @@ import {
   AutocompleteItem,
   AutocompleteProps,
 } from "@nextui-org/autocomplete";
-import { Key, useEffect } from "react";
+import { Key, useEffect, useState } from "react";
 import { Certificate } from "../../../../../interface/certificate";
 import useCertificateStore from "../../../../../store/certificates";
 
@@ -13,21 +13,41 @@ interface InputTemplate
     "children" | "onSelectionChange"
   > {
   selectedCertificate?: Certificate | null;
+  filterByActive: boolean;
   onSelectionChange?: (arg: Certificate | null) => void;
 }
 
 export const InputCertificates = ({
   onSelectionChange,
+  filterByActive = false,
   ...props
 }: InputTemplate) => {
-  const { certificates, isLoadingCertificates, fetchCertificates } =
-    useCertificateStore();
+  const {
+    certificates,
+    isLoadingCertificates,
+    fetchCertificates,
+    errorCertificates,
+  } = useCertificateStore();
+
+  const [filteredCertificates, setFilteredCertificates] = useState<
+    Certificate[]
+  >([]);
 
   useEffect(() => {
-    if (certificates.length === 0) {
+    if (certificates.length === 0 && !errorCertificates) {
       fetchCertificates();
     }
-  }, [certificates, fetchCertificates]);
+  }, [fetchCertificates, certificates.length, errorCertificates]);
+
+  useEffect(() => {
+    if (filterByActive) {
+      setFilteredCertificates(
+        certificates.filter((certificate) => certificate.is_active)
+      );
+    } else {
+      setFilteredCertificates(certificates);
+    }
+  }, [filterByActive, certificates]);
 
   const handleSelection = (e: Key | null) => {
     if (onSelectionChange) {
@@ -35,15 +55,17 @@ export const InputCertificates = ({
       onSelectionChange(certificate || null);
     }
   };
+
   return (
     <Autocomplete
       isLoading={isLoadingCertificates}
-      defaultItems={Array.isArray(certificates) ? certificates : []}
-      label="Selecciona la plantilla"
+      defaultItems={filteredCertificates}
+      label="Seleccione el certificado"
       onSelectionChange={handleSelection}
       {...props}
+      listboxProps={{ emptyContent: "No se encontraron certificaciones" }}
     >
-      {certificates.map((type) => (
+      {filteredCertificates.map((type) => (
         <AutocompleteItem key={type.id}>{type.name}</AutocompleteItem>
       ))}
     </Autocomplete>
