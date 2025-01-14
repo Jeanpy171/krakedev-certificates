@@ -54,7 +54,7 @@ const SearchEntitie = () => {
 
   return (
     <main className="h-full flex flex-col gap-5 justify-start items-center p-5">
-      <h3 className="text-3xl font-bold">Consulta de Certificados KRAKEDEV</h3>\
+      <h3 className="text-3xl font-bold">Consulta de Certificados KRAKEDEV</h3>
       <NotFoundModal isOpen={isOpen} onClose={onClose} />
       <AsideLayout>
         <div className="flex flex-col gap-4 justify-start items-start p-10">

@@ -9,14 +9,14 @@ const TemplateList = ({
   isEditable,
   templates,
   handleOnChange,
-  addCertificate,
-  deleteCertificate,
+  addTemplate,
+  deleteTemplate,
 }: {
   isEditable: boolean;
   templates: Template[];
   handleOnChange: (field: string, value: string | Template) => void;
-  addCertificate: () => void;
-  deleteCertificate: (arg0: string) => void;
+  addTemplate: () => void;
+  deleteTemplate: (arg0: string) => void;
 }) => {
   return (
     <article className="overflow-y-auto w-full grid gap-5 grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))]">
@@ -28,12 +28,12 @@ const TemplateList = ({
                 template={template}
                 key={template.id}
                 onChange={handleOnChange}
-                deleteCertificate={() => deleteCertificate(template.id)}
+                deleteCertificate={() => deleteTemplate(template.id)}
               />
             ))}
           </ul>
           {isEditable && (
-            <button onClick={addCertificate} className={templateButtonStyles}>
+            <button onClick={addTemplate} className={templateButtonStyles}>
               <IoMdAdd size={40} />
               <strong>Añadir plantilla</strong>
             </button>
@@ -41,7 +41,7 @@ const TemplateList = ({
         </article>
       ) : (
         isEditable && (
-          <button onClick={addCertificate} className={templateButtonStyles}>
+          <button onClick={addTemplate} className={templateButtonStyles}>
             <IoMdAdd size={40} />
             <strong>Añadir plantilla</strong>
           </button>

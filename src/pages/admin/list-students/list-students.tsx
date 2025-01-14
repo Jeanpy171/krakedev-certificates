@@ -6,10 +6,11 @@ import { Input } from "@nextui-org/input";
 import { useEffect, useState } from "react";
 import StudentModal from "./components/student-modal/student-modal";
 import useCertificateStore from "../../../store/certificates";
-import { Toaster } from "sonner";
+import { toast, Toaster } from "sonner";
 import { useDebounce } from "../../../hooks/useDebounce";
 import { useStudents } from "../../../hooks/useStudents";
 import { Student } from "../../../interface/student";
+import { handleDeleteStudent } from "../../../services/students";
 
 export const ListStudents = () => {
   const { isOpen, onOpenChange, onOpen } = useDisclosure();
@@ -19,6 +20,7 @@ export const ListStudents = () => {
     isLoading,
     hasMore,
     fetchStudentsWithPagination,
+    handleUpdateStudents,
     searchStudents,
   } = useStudents();
 
@@ -45,6 +47,36 @@ export const ListStudents = () => {
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchName(e.target.value);
+    setStudent(null);
+  };
+
+  const handleDeleteStudentModal = async (id: string) => {
+    try {
+      await handleDeleteStudent(id);
+      const updateStudents = students.filter((student) => student.id !== id);
+      handleUpdateStudents(updateStudents);
+      toast.success("Estudiante eliminado correctamente");
+      setStudent(null);
+    } catch (error) {
+      console.log(error);
+      toast.success("Error al eliminar el estudiante");
+      throw error;
+    }
+  };
+
+  const handleUpdateStudentData = (
+    id: string,
+    updateData: Partial<Student>
+  ) => {
+    const updateStudents = [...students];
+    const studentIndex = updateStudents.findIndex(
+      (student) => student.id === id
+    );
+    updateStudents[studentIndex] = {
+      ...updateStudents[studentIndex],
+      ...updateData,
+    };
+    handleUpdateStudents(updateStudents);
   };
 
   if (isLoadingCertificates) return <p>Cargando estudiantes...</p>;
@@ -63,20 +95,24 @@ export const ListStudents = () => {
           Crear de forma masiva
         </Button>
       </article>
-
       <MasiveCreationModal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         scrollBehavior="inside"
         size="5xl"
       />
-      <StudentModal
-        data={student}
-        isOpen={student ? true : false}
-        onClose={() => setStudent(null)}
-        scrollBehavior="inside"
-        size="5xl"
-      />
+      {student && (
+        <StudentModal
+          data={student}
+          isOpen={!!student}
+          onClose={() => setStudent(null)}
+          handleDeleteStudent={handleDeleteStudentModal}
+          handleUpdateStudentData={handleUpdateStudentData}
+          scrollBehavior="inside"
+          size="5xl"
+        />
+      )}
+
       <section className="flex justify-center items-center">
         {isLoading ? (
           <h4>Cargando ...</h4>

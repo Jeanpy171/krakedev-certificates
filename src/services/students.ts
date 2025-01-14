@@ -1,5 +1,6 @@
 import {
   collection,
+  deleteDoc,
   doc,
   DocumentData,
   getDocs,
@@ -190,5 +191,15 @@ export const handleUpdateStudent = async (
         error instanceof Error ? error.message : "desconocido"
       }`
     );
+  }
+};
+
+
+export const handleDeleteStudent = async (id: string): Promise<void> => {
+  try {
+    await deleteDoc(doc(db, "students", id));
+  } catch (error) {
+    console.error("Error al eliminar el estudiante:", error);
+    throw error;
   }
 };

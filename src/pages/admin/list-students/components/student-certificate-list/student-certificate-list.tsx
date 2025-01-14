@@ -12,14 +12,19 @@ import { toast } from "sonner";
 const StudentCertificateList = ({
   student,
   onClose,
+  handleDeleteStudent,
+  handleUpdateStudentData,
 }: {
   student: Student;
   onClose: () => void;
+  handleDeleteStudent: (id: string) => void;
+  handleUpdateStudentData: (arg0: string, arg: Partial<Student>) => void;
 }) => {
   const { certificates } = useCertificateStore();
   const [studentData, setStudentData] = useState(student);
   const [isLoading, setIsLoading] = useState(false);
   const [statusUpdate, setStatusUpdate] = useState<string | null>(null);
+  const [email, setEmail] = useState<string>(student.email);
 
   const handleGetTemplateUrl = (
     id_certificate: string,
@@ -59,7 +64,11 @@ const StudentCertificateList = ({
           ...updateStudentCertificates,
         };
       }
+      if (email && email !== student.email) {
+        updateStudentCertificates.email = email;
+      }
       await handleUpdateStudent(studentData.id, updateStudentCertificates);
+      handleUpdateStudentData(student.id, updateStudentCertificates);
       toast.success("Certificados del estudiante actualizados correctamente");
       onClose();
     } catch (error) {
@@ -117,12 +126,20 @@ const StudentCertificateList = ({
           </span>
         </article>
       )}
-      <ul className="grid gap-5 grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] w-full h-[480px] overflow-y-auto overflow-x-hidden">
+      <Input
+        className="w-1/2"
+        label="Correo del estudiante"
+        placeholder="Correo del estudiante"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        name="email"
+      />
+      <ul className="grid gap-5 grid-cols-[repeat(auto-fit,_minmax(350px,_1fr))] w-full h-[500px] overflow-y-auto overflow-x-hidden">
         {studentData?.certificates && studentData?.certificates.length > 0 ? (
           studentData.certificates.map((certificate) => (
             <li
               key={certificate.id_certificate}
-              className="relative flex flex-col gap-3 p-4 py-8 border rounded-md shadow-md w-full max-w-[350px] h-[350px] overflow-hidden"
+              className="relative flex flex-col gap-6 p-4 py-8 border rounded-md shadow-md w-[400px] h-[400px] "
             >
               <button
                 onClick={() => {
@@ -142,18 +159,14 @@ const StudentCertificateList = ({
               >
                 <IoMdClose size={20} color="white" />
               </button>
-              <div className="truncate">
-                <Input value={certificate.name} isDisabled={true} />
-              </div>
-              <div className="flex-1 overflow-hidden">
-                <CertificateWritter
-                  url={handleGetTemplateUrl(
-                    certificate.id_certificate,
-                    certificate.id_template
-                  )}
-                  fullname={studentData.fullname}
-                />
-              </div>
+              <Input value={certificate.name} isDisabled={true} />
+              <CertificateWritter
+                url={handleGetTemplateUrl(
+                  certificate.id_certificate,
+                  certificate.id_template
+                )}
+                fullname={studentData.fullname}
+              />
             </li>
           ))
         ) : (
@@ -163,7 +176,7 @@ const StudentCertificateList = ({
         )}
       </ul>
 
-      <span className="flex justify-start items-center">
+      <span className="flex justify-between items-center">
         <Button
           size="md"
           isLoading={isLoading}
@@ -172,6 +185,15 @@ const StudentCertificateList = ({
           onPress={handleCreateStudentCertificate}
         >
           Confirmar cambios
+        </Button>
+        <Button
+          size="md"
+          isLoading={isLoading}
+          isDisabled={isLoading}
+          color="danger"
+          onPress={() => handleDeleteStudent(student.id)}
+        >
+          Eliminar estudiante
         </Button>
       </span>
     </article>

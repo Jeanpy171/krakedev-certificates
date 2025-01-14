@@ -1,5 +1,6 @@
 import {
   collection,
+  deleteDoc,
   doc,
   getDocs,
   query,
@@ -181,5 +182,15 @@ export const uploadPdfToFirebase = async (
   } catch (error) {
     console.error("Error al subir el archivo:", error);
     throw new Error("Error al subir el archivo. Intenta nuevamente.");
+  }
+};
+
+
+export const handleDeleteCertificate = async (id: string): Promise<void> => {
+  try {
+    await deleteDoc(doc(db, "certificates", id));
+  } catch (error) {
+    console.error("Error al eliminar la certificacion:", error);
+    throw error;
   }
 };

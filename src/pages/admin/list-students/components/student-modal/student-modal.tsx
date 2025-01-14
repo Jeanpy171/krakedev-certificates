@@ -12,17 +12,32 @@ import StudentCertificateList from "../student-certificate-list/student-certific
 
 interface CustomModal extends Omit<ModalProps, "children"> {
   data: Student | null;
+  handleDeleteStudent: (id: string) => void;
+  handleUpdateStudentData: (arg0: string, arg: Partial<Student>) => void;
 }
 
-export default function StudentModal({ data, ...props }: CustomModal) {
+export default function StudentModal({
+  data,
+  handleDeleteStudent,
+  handleUpdateStudentData,
+  ...props
+}: CustomModal) {
   const TabsComponent = ({ onClose }: { onClose: () => void }) => {
     return (
       <Tabs aria-label="Options">
         <Tab key="Certificates" title="Certificados">
-          <StudentCertificateList student={data as Student} onClose={onClose} />
+          <StudentCertificateList
+            student={data as Student}
+            onClose={onClose}
+            handleDeleteStudent={handleDeleteStudent}
+            handleUpdateStudentData={handleUpdateStudentData}
+          />
         </Tab>
         <Tab key="Create" title="Crear nuevo certificado">
-          <CreateStudentCertificate student={data as Student} onClose={onClose} />
+          <CreateStudentCertificate
+            student={data as Student}
+            onClose={onClose}
+          />
         </Tab>
       </Tabs>
     );

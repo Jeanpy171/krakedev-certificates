@@ -17,7 +17,7 @@ const CreateCertificate = () => {
     templates: [],
   });
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { fetchCertificates } = useCertificateStore();
+  const { setCertificates, certificates } = useCertificateStore();
 
   useEffect(() => {
     if (certificate?.name) {
@@ -88,7 +88,8 @@ const CreateCertificate = () => {
         created_at: new Date().toISOString(),
         templates: [],
       });
-      fetchCertificates();
+      //fetchCertificates();
+      setCertificates([...certificates, certificate]);
     } catch (error) {
       console.error(error);
       toast.error("Error al crear nueva certificación");
@@ -111,10 +112,11 @@ const CreateCertificate = () => {
 
   return (
     <div className="flex flex-col gap-4 justify-start items-start p-10 w-full">
-      <article className="flex gap-5 w-full">
+      <article className="flex gap-5 w-full justify-center items-center">
         <Input
           label="Nombre del certificado"
           placeholder="Nombre del certificado"
+          value={certificate?.name}
           onChange={(e) => handleOnChange("name", e.target.value)}
         />
         <Button
@@ -123,7 +125,10 @@ const CreateCertificate = () => {
           color="success"
           onClick={handleUploadTemplate}
         >
-          Confirmar
+          Crear
+        </Button>
+        <Button size="md" onPress={() => setCertificate(null)} color="danger">
+          Descartar
         </Button>
       </article>
 
@@ -132,8 +137,8 @@ const CreateCertificate = () => {
           isEditable={true}
           templates={certificate?.templates || []}
           handleOnChange={handleOnChange}
-          addCertificate={addCertificate}
-          deleteCertificate={deleteCertificate}
+          addTemplate={addCertificate}
+          deleteTemplate={deleteCertificate}
         />
       </section>
     </div>

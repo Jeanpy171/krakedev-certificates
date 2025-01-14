@@ -7,14 +7,13 @@ export const CertificateVisualizer = ({ url }: { url?: string | null }) => {
           style={{
             width: "100%",
             height: "100%",
-            // border: "none",
-            // objectFit: "contain",
-            // display: "block",
+            border: "none",
+            display: "block",
           }}
           title="PDF Preview"
         />
       ) : (
-        <p className="text-gray-500">Aqui se visualizara la certificacion</p>
+        <p className="text-gray-500">Aquí se visualizará la certificación</p>
       )}
     </div>
   );

@@ -52,14 +52,15 @@ const CertificateWritter = ({
   }, [url, generatePdf]);
 
   return (
-    <article className="w-full h-full flex justify-center items-center">
+    <article className="w-full h-full flex justify-center items-center overflow-hidden">
       {url ? (
         <CertificateVisualizer url={pdfUrl} />
       ) : (
-        <p>Esperando informacion</p>
+        <p>Esperando plantilla</p>
       )}
     </article>
   );
+  
 };
 
 export default CertificateWritter;

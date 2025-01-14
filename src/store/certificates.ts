@@ -7,13 +7,16 @@ export interface CertificateStore {
   isLoadingCertificates: boolean;
   errorCertificates: string | null;
   fetchCertificates: () => Promise<void>;
+  setCertificates: (arg0: Certificate[]) => void;
 }
 
 const useCertificateStore = create<CertificateStore>((set) => ({
   certificates: [],
   isLoadingCertificates: false,
   errorCertificates: null,
-
+  setCertificates: (certificates) => {
+    set({ certificates });
+  },
   fetchCertificates: async () => {
     //const { certificates } = get();
     //if (certificates.length > 0) return;
