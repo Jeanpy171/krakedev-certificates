@@ -103,7 +103,7 @@ const CertificateList = () => {
       return;
     }
 
-    //setIsLoading(true);
+    setIsLoading(true);
     console.warn("ESTA ES LA PLANTILLA QUE VOY A SUBIR: ", selectedCertificate);
     try {
       await handleUpdateCertificate(selectedCertificate?.id, {
@@ -128,9 +128,6 @@ const CertificateList = () => {
     setIsLoadingDelete(true);
     try {
       await handleUpdateStateCertificate(selectedCertificate?.id, state);
-      // const updateCertificates = certificates.filter(
-      //   (certificate) => certificate.id !== selectedCertificate?.id
-      // );
       const updateCertificates = [...certificates];
       const filterById = updateCertificates.findIndex(
         (certificate) => certificate.id === selectedCertificate?.id

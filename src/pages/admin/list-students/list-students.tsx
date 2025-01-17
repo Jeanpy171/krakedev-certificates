@@ -85,8 +85,6 @@ export const ListStudents = () => {
   };
 
   const handleUpdateMasiveStudents = () => {
-    // const updateStudents = [...students, ...newStudents];
-    // handleUpdateStudents(updateStudents);
     console.warn("LLAMANDO A PAGINACXION POR MASIVO ------");
     fetchStudentsWithPagination(10);
   };

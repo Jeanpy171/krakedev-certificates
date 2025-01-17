@@ -9,7 +9,7 @@ import { CertificateStudent, Student } from "../../../interface/student";
 import { handleUpdateStudent } from "../../../services/students";
 import { getCurrentDate } from "../../../utils/date";
 import { Routes } from "../../../navigation/routes";
-import CertificateWritter from "../../../components/certificate-writter";
+import CertificateWritter from "../../../components/certificate-writter/certificate-writter";
 
 const ViewCertificate = () => {
   const { state } = useLocation();

@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { AsideLayout } from "../../../../../layout/aside-layout";
 import { InputCertificates } from "../../../certificates/components/input-certificate/input-certificate";
 import { InputTypeTemplate } from "../../../certificates/components/input-type-template/input-type-template";
 import { Button } from "@nextui-org/button";
-import CertificateWritter from "../../../../../components/certificate-writter";
+import CertificateWritter from "../../../../../components/certificate-writter/certificate-writter";
 import { Certificate } from "../../../../../interface/certificate";
 import { Template } from "../../../../../interface/template";
 import { Student } from "../../../../../interface/student";
@@ -12,6 +12,7 @@ import { Input } from "@nextui-org/input";
 import { v4 as uuidv4 } from "uuid";
 import { handleCreateStudent } from "../../../../../services/students";
 import { toast } from "sonner";
+import { generateUniqueCode } from "../../../../../utils/code";
 
 const CreateStudent = () => {
   const [student, setStudent] = useState<Student>({
@@ -19,6 +20,7 @@ const CreateStudent = () => {
     email: "",
     certificates: [],
     fullname: "",
+    code: generateUniqueCode(),
     created_at: getCurrentDate(),
   });
   const [selectedCertificate, setSelectedCertificate] =
@@ -47,6 +49,7 @@ const CreateStudent = () => {
         email: "",
         certificates: [],
         fullname: "",
+        code: generateUniqueCode(),
         created_at: getCurrentDate(),
       });
     } catch (error) {

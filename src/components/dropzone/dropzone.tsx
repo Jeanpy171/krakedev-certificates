@@ -29,7 +29,6 @@ export default function Dropzone({
   handleRemoveSelectedFile,
   file,
   handleReaderFiles,
-  //setFiles,
   multiple = false,
   disabled = false,
 }: DropzoneProps) {

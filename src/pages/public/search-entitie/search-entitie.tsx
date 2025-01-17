@@ -31,7 +31,6 @@ const SearchEntitie = () => {
     console.log("Email:", email);
     setIsLoading(true);
     try {
-      //const filterData = await searchByEmail(email);
       const studentData = await handleGetStudentByEmail(email);
       if (studentData) {
         navigate(Routes.public.routes.view_certificate.path, {

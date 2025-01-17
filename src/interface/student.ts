@@ -5,6 +5,7 @@ export interface Student {
   fullname: string;
   email: string;
   observation?: string;
+  code: string;
   updated_at?: Timestamp;
   created_at?: Timestamp;
   status?: string;

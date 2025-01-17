@@ -6,7 +6,7 @@ import { AsideLayout } from "../../../../../layout/aside-layout";
 import { InputCertificates } from "../../../certificates/components/input-certificate/input-certificate";
 import { InputTypeTemplate } from "../../../certificates/components/input-type-template/input-type-template";
 import { Button } from "@nextui-org/button";
-import CertificateWritter from "../../../../../components/certificate-writter";
+import CertificateWritter from "../../../../../components/certificate-writter/certificate-writter";
 import { Student } from "../../../../../interface/student";
 import { handleUpdateStudent } from "../../../../../services/students";
 import { toast } from "sonner";

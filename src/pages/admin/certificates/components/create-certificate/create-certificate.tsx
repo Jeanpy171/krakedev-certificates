@@ -104,7 +104,6 @@ const CreateCertificate = () => {
         templates: [],
         is_active: true,
       });
-      //fetchCertificates();
       setCertificates([...certificates, certificate]);
     } catch (error) {
       console.error(error);

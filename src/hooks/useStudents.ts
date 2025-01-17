@@ -15,10 +15,9 @@ export function useStudents() {
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [isSearching, setIsSearching] = useState<boolean>(false);
 
-  // Obtener estudiantes con paginación
   const fetchStudentsWithPagination = useCallback(
     async (limitNumber: number) => {
-      if (!hasMore || isSearching) return; // Evitar la carga si ya no hay más o si estamos buscando
+      if (!hasMore || isSearching) return;
 
       setIsLoading(true);
       try {
@@ -36,7 +35,7 @@ export function useStudents() {
 
         setLastDocument(newLastDocument as QueryDocumentSnapshot<DocumentData>);
         if (!newLastDocument || newStudents.length < limitNumber) {
-          setHasMore(false); // Si no hay más estudiantes, desactivar la paginación
+          setHasMore(false);
         }
       } catch (error) {
         console.error("Error al cargar estudiantes con paginación:", error);
@@ -47,13 +46,11 @@ export function useStudents() {
     [hasMore, isSearching, lastDocument]
   );
 
-  // Buscar estudiantes por nombre
   const searchStudents = useCallback(async (searchTerm: string) => {
     if (!searchTerm.trim()) {
-      // Limpiar la lista solo si no hay término de búsqueda
       setStudents([]);
       setLastDocument(undefined);
-      setHasMore(true); // Reestablecer la paginación
+      setHasMore(true);
       return;
     }
 
@@ -63,8 +60,8 @@ export function useStudents() {
       const filteredStudents = await handleGetAllStudentsByFullname(
         searchTerm.toUpperCase()
       );
-      setStudents(filteredStudents); // Establecer los estudiantes filtrados
-      setHasMore(false); // No cargar más resultados
+      setStudents(filteredStudents);
+      setHasMore(false);
     } catch (error) {
       console.error("Error al buscar estudiantes:", error);
     } finally {
@@ -74,7 +71,7 @@ export function useStudents() {
   }, []);
 
   const handleUpdateStudents = (students: Student[]) => {
-    setStudents(students); // Actualiza los estudiantes
+    setStudents(students);
   };
 
   return {

@@ -2,7 +2,7 @@ import { IoMdClose } from "react-icons/io";
 import { Student } from "../../../../../interface/student";
 import useCertificateStore from "../../../../../store/certificates";
 import { Input } from "@nextui-org/input";
-import CertificateWritter from "../../../../../components/certificate-writter";
+import CertificateWritter from "../../../../../components/certificate-writter/certificate-writter";
 import { Button } from "@nextui-org/button";
 import { useState } from "react";
 import { handleUpdateStudent } from "../../../../../services/students";

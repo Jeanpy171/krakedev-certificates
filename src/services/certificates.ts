@@ -26,7 +26,6 @@ export const handleGetAllCertificates = async (): Promise<
   } catch (error) {
     console.log("Error al traer todas los certificados" + error);
     return null;
-    //throw new Error("Error al traer todas los certificados");
   }
 };
 
@@ -38,7 +37,6 @@ export const handleGetCertificateById = async (
     const querySnapshot = await getDocs(filter);
 
     if (querySnapshot.empty) {
-      //throw new Error("No se ha encontrado el correo electrónico");
       return null;
     }
 

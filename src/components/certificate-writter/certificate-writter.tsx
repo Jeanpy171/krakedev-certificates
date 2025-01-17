@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { CertificateVisualizer } from "./certificate-visualizer/certificate-visualizer";
-import { PDFDocument, rgb } from "pdf-lib";
+import { CertificateVisualizer } from "../certificate-visualizer/certificate-visualizer";
+import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 
 const CertificateWritter = ({
   url,
@@ -21,6 +21,9 @@ const CertificateWritter = ({
         res.arrayBuffer()
       );
       const pdfDoc = await PDFDocument.load(existingPdfBytes);
+      const timesRomanFont = await pdfDoc.embedFont(
+        StandardFonts.TimesRomanBoldItalic
+      );
       const pages = pdfDoc.getPages();
       const firstPage = pages[0];
 
@@ -34,6 +37,7 @@ const CertificateWritter = ({
         x: centeredX,
         y: centerY,
         size: fontSize,
+        font: timesRomanFont,
         color: rgb(0, 0, 0),
       });
 
@@ -60,7 +64,6 @@ const CertificateWritter = ({
       )}
     </article>
   );
-  
 };
 
 export default CertificateWritter;

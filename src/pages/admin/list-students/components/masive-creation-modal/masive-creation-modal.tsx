@@ -16,6 +16,8 @@ import { handleCreateStudent } from "../../../../../services/students";
 import { getCurrentDate } from "../../../../../utils/date";
 import { Certificate } from "../../../../../interface/certificate";
 import { toast } from "sonner";
+import { generateUniqueCode } from "../../../../../utils/code";
+import { Student } from "../../../../../interface/student";
 
 interface ExcelRow {
   DIPLOMA: string;
@@ -23,11 +25,12 @@ interface ExcelRow {
   ESTUDIANTES: string;
 }
 
-export interface CreateStudent {
+export interface CreateStudent extends Partial<Student> {
   id: string;
   email: string;
   fullname: string;
   created_at: Timestamp;
+  code: string;
   certificate?: {
     name: string;
     range: string;
@@ -82,6 +85,7 @@ const parseExcelFile = (
             id: uuidv4(),
             email: row.EMAIL,
             fullname: row.ESTUDIANTES,
+            code: generateUniqueCode(),
             created_at: getCurrentDate(),
             certificate: {
               name: certificateData.certificate,
