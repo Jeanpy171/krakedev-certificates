@@ -22,8 +22,8 @@ import { Student } from "../../../../../interface/student";
 interface ExcelRow {
   DIPLOMA: string;
   EMAIL: string;
-  ESTUDIANTES?: string; // Permite que sea opcional
-  ESTUDIANTE?: string; // Permite que sea opcional
+  ESTUDIANTES?: string;
+  ESTUDIANTE?: string;
 }
 
 export interface CreateStudent extends Partial<Student> {
@@ -65,13 +65,12 @@ const parseExcelFile = (
             !row.DIPLOMA.toLowerCase().includes("no recibe diploma")
         )
         .forEach((row) => {
-          // Obtener el nombre del estudiante de las posibles columnas
           const fullname = row.ESTUDIANTES || row.ESTUDIANTE;
           if (!fullname) {
             toast.error(
               "No se encontraron los nombres de los estudiantes, revise la columna en el excel"
             );
-            return; // Salir si no se encuentra el nombre
+            return;
           }
 
           const diplomaParts = row.DIPLOMA.split(" ");

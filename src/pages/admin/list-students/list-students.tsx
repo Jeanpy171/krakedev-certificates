@@ -28,11 +28,10 @@ export const ListStudents = () => {
   const debouncedSearchName = useDebounce(searchName, 500);
   const { fetchCertificates, isLoadingCertificates } = useCertificateStore();
 
-  const initialLoadRef = useRef(false); // Controla si la carga inicial ya ocurrió
-  const searchRef = useRef(""); // Evita múltiples llamadas a `searchStudents`
+  const initialLoadRef = useRef(false);
+  const searchRef = useRef("");
 
   useEffect(() => {
-    // Carga inicial de estudiantes
     if (!initialLoadRef.current) {
       initialLoadRef.current = true;
       fetchStudentsWithPagination(10);
@@ -40,31 +39,23 @@ export const ListStudents = () => {
   }, [fetchStudentsWithPagination]);
 
   useEffect(() => {
-    // Lógica de búsqueda
     const performSearch = async () => {
       const trimmedSearchName = debouncedSearchName.trim();
-
-      // Verificar si el término de búsqueda ha cambiado
       if (trimmedSearchName !== searchRef.current) {
         searchRef.current = trimmedSearchName;
-
-        // Llamar a searchStudents para que se maneje la búsqueda y la paginación
         await searchStudents(trimmedSearchName);
       }
     };
-
-    // Ejecutar la búsqueda cuando cambie el término de búsqueda
     performSearch();
   }, [debouncedSearchName, searchStudents]);
 
   useEffect(() => {
-    // Cargar certificados al montar el componente
     fetchCertificates();
   }, [fetchCertificates]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchName(e.target.value); // Actualizar valor del campo de búsqueda
-    setStudent(null); // Reiniciar estudiante seleccionado
+    setSearchName(e.target.value);
+    setStudent(null);
   };
 
   const handleDeleteStudentModal = async (id: string) => {

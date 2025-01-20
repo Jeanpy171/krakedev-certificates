@@ -20,7 +20,7 @@ export function useStudents() {
       console.warn("SEW ACTIVA PAGINACION ===========");
       console.warn("HAS MORE ===========", more);
       console.warn("IS SEARCHING ===========", isSearching);
-      if (!more || isSearching) return; // Evita solapamiento
+      if (!more || isSearching) return;
       console.warn("PASE EL IF DE VALIDACION ===========");
       setIsLoading(true);
       try {
@@ -51,11 +51,10 @@ export function useStudents() {
   const searchStudents = useCallback(
     async (searchTerm: string) => {
       if (!searchTerm.trim()) {
-        // Cuando el término de búsqueda está vacío, activamos la paginación nuevamente
-        setStudents([]); // Limpia la lista de resultados de búsqueda
-        setHasMore(true); // Reactivamos la paginación
-        setLastDocument(undefined); // Resetear el último documento para que la paginación inicie desde el principio
-        fetchStudentsWithPagination(10, true); // Reactivar la paginación
+        setStudents([]);
+        setHasMore(true);
+        setLastDocument(undefined);
+        fetchStudentsWithPagination(10, true);
         return;
       }
 
@@ -66,8 +65,8 @@ export function useStudents() {
           searchTerm.toUpperCase()
         );
         setStudents(filteredStudents);
-        setLastDocument(undefined); // No es necesario el 'lastDocument' cuando estamos buscando
-        setHasMore(false); // Desactivamos la paginación mientras estamos buscando
+        setLastDocument(undefined);
+        setHasMore(false);
       } catch (error) {
         console.error("Error al buscar estudiantes:", error);
       } finally {

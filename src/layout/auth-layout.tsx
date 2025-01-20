@@ -9,9 +9,7 @@ export default function AuthLayout() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Asegurarse de que no se haga redirección antes de que se haya terminado la carga de los datos
     if (!loading && user) {
-      // Redirigir al usuario al path de estudiantes si está autenticado
       navigate(Routes.admin.path + Routes.admin.routes.students.path, {
         replace: true,
       });
