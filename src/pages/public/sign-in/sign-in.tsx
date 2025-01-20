@@ -26,7 +26,7 @@ const SignIn = () => {
     setIsLoading(true);
     try {
       await handleLogin(email, password);
-      navigate(Routes.admin.path)
+      navigate(Routes.admin.path);
     } catch (error) {
       alert(error);
       throw error;
@@ -57,8 +57,13 @@ const SignIn = () => {
               placeholder="Digita tu contrasenia"
               type="password"
             />
-            <Button isLoading={isLoading} type="submit">
-              Buscar
+            <Button
+              isDisabled={isLoading}
+              color="primary"
+              isLoading={isLoading}
+              type="submit"
+            >
+              Iniciar sesion
             </Button>
           </form>
         </div>

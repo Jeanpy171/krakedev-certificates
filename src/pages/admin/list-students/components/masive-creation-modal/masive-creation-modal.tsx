@@ -22,7 +22,8 @@ import { Student } from "../../../../../interface/student";
 interface ExcelRow {
   DIPLOMA: string;
   EMAIL: string;
-  ESTUDIANTES: string;
+  ESTUDIANTES?: string; // Permite que sea opcional
+  ESTUDIANTE?: string; // Permite que sea opcional
 }
 
 export interface CreateStudent extends Partial<Student> {
@@ -64,6 +65,15 @@ const parseExcelFile = (
             !row.DIPLOMA.toLowerCase().includes("no recibe diploma")
         )
         .forEach((row) => {
+          // Obtener el nombre del estudiante de las posibles columnas
+          const fullname = row.ESTUDIANTES || row.ESTUDIANTE;
+          if (!fullname) {
+            toast.error(
+              "No se encontraron los nombres de los estudiantes, revise la columna en el excel"
+            );
+            return; // Salir si no se encuentra el nombre
+          }
+
           const diplomaParts = row.DIPLOMA.split(" ");
           const range = diplomaParts.slice(1).join(" ") || "";
 
@@ -81,10 +91,17 @@ const parseExcelFile = (
             return;
           }
 
+          if (!row.EMAIL) {
+            toast.error(
+              "No se encontraron los emails de los estudiantes, revise la columna en el excel"
+            );
+            return;
+          }
+
           students.push({
             id: uuidv4(),
             email: row.EMAIL,
-            fullname: row.ESTUDIANTES,
+            fullname,
             code: generateUniqueCode(),
             created_at: getCurrentDate(),
             certificate: {
@@ -96,8 +113,11 @@ const parseExcelFile = (
             },
           });
         });
-      if (students.length === 0)
+
+      if (students.length === 0) {
         toast.error("No se detectaron estudiantes con certificados");
+        return;
+      }
       resolve(students);
     };
 
@@ -105,6 +125,7 @@ const parseExcelFile = (
       toast.error("El archivo no tiene el formato requerido");
       reject("Error al leer el archivo.");
     };
+
     reader.readAsBinaryString(file);
   });
 };
@@ -132,9 +153,9 @@ const uploadStudents = async (
         })
       )
     );
-    callbackUpdate();
     console.log("Todos los estudiantes se han subido exitosamente.");
     toast.success("Todos los estudiantes se han subido exitosamente.");
+    callbackUpdate();
   } catch (error) {
     console.error("Error inesperado al subir estudiantes:", error);
     toast.error("Error inesperado al subir estudiantes.");
@@ -219,7 +240,14 @@ export default function MasiveCreationModal({
   );
 
   return (
-    <Modal {...props} onClose={() => setStudents([])}>
+    <Modal
+      {...props}
+      onClose={() => {
+        setStudents([]);
+        setFile(null);
+        setCertificate(null);
+      }}
+    >
       <ModalContent>
         {(onClose) => (
           <>
@@ -241,12 +269,16 @@ export default function MasiveCreationModal({
                       accept=".xls,.xlsx"
                       onChange={(e) => setFile(e.target.files?.[0] || null)}
                     />
-                    <Button color="warning" onClick={handleFileConversion}>
-                      Convertir
-                    </Button>
-                    <Button color="danger" onClick={() => setStudents([])}>
-                      Eliminar
-                    </Button>
+                    {file && (
+                      <>
+                        <Button color="warning" onClick={handleFileConversion}>
+                          Convertir
+                        </Button>
+                        <Button color="danger" onClick={() => setStudents([])}>
+                          Eliminar
+                        </Button>
+                      </>
+                    )}
                   </>
                 )}
               </div>

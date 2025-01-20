@@ -1,24 +1,27 @@
-import { useState, useCallback } from "react";
-import { Student } from "../interface/student";
+import { DocumentData, QueryDocumentSnapshot } from "firebase/firestore";
+import { useCallback, useState } from "react";
 import {
-  handleGetStudentsWithPagination,
   handleGetAllStudentsByFullname,
+  handleGetStudentsWithPagination,
 } from "../services/students";
-import { QueryDocumentSnapshot, DocumentData } from "firebase/firestore";
+import { Student } from "../interface/student";
 
 export function useStudents() {
   const [students, setStudents] = useState<Student[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [lastDocument, setLastDocument] = useState<
-    QueryDocumentSnapshot<DocumentData> | undefined
-  >(undefined);
-  const [hasMore, setHasMore] = useState<boolean>(true);
-  const [isSearching, setIsSearching] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [lastDocument, setLastDocument] =
+    useState<QueryDocumentSnapshot<DocumentData>>();
+  const [hasMore, setHasMore] = useState(true);
+  const [isSearching, setIsSearching] = useState(false);
 
   const fetchStudentsWithPagination = useCallback(
-    async (limitNumber: number) => {
-      if (!hasMore || isSearching) return;
-
+    async (limitNumber: number, hasMoreElements?: boolean) => {
+      const more = hasMoreElements ?? hasMore;
+      console.warn("SEW ACTIVA PAGINACION ===========");
+      console.warn("HAS MORE ===========", more);
+      console.warn("IS SEARCHING ===========", isSearching);
+      if (!more || isSearching) return; // Evita solapamiento
+      console.warn("PASE EL IF DE VALIDACION ===========");
       setIsLoading(true);
       try {
         const { students: newStudents, lastDocument: newLastDocument } =
@@ -29,14 +32,13 @@ export function useStudents() {
           const filteredStudents = newStudents.filter(
             (student) => !existingIds.has(student.id)
           );
-          console.warn("ESTO RECIBO DE PAGINACION: ", filteredStudents);
           return [...prev, ...filteredStudents];
         });
 
         setLastDocument(newLastDocument as QueryDocumentSnapshot<DocumentData>);
-        if (!newLastDocument || newStudents.length < limitNumber) {
-          setHasMore(false);
-        }
+        console.warn("NUMERO DE ESTUDIANTES =====", newStudents.length);
+        console.warn("limites =====", limitNumber);
+        setHasMore(newStudents.length === limitNumber);
       } catch (error) {
         console.error("Error al cargar estudiantes con paginación:", error);
       } finally {
@@ -46,33 +48,39 @@ export function useStudents() {
     [hasMore, isSearching, lastDocument]
   );
 
-  const searchStudents = useCallback(async (searchTerm: string) => {
-    if (!searchTerm.trim()) {
-      setStudents([]);
-      setLastDocument(undefined);
-      setHasMore(true);
-      return;
-    }
+  const searchStudents = useCallback(
+    async (searchTerm: string) => {
+      if (!searchTerm.trim()) {
+        // Cuando el término de búsqueda está vacío, activamos la paginación nuevamente
+        setStudents([]); // Limpia la lista de resultados de búsqueda
+        setHasMore(true); // Reactivamos la paginación
+        setLastDocument(undefined); // Resetear el último documento para que la paginación inicie desde el principio
+        fetchStudentsWithPagination(10, true); // Reactivar la paginación
+        return;
+      }
 
-    setIsLoading(true);
-    setIsSearching(true);
-    try {
-      const filteredStudents = await handleGetAllStudentsByFullname(
-        searchTerm.toUpperCase()
-      );
-      setStudents(filteredStudents);
-      setHasMore(false);
-    } catch (error) {
-      console.error("Error al buscar estudiantes:", error);
-    } finally {
-      setIsLoading(false);
-      setIsSearching(false);
-    }
-  }, []);
+      setIsLoading(true);
+      setIsSearching(true);
+      try {
+        const filteredStudents = await handleGetAllStudentsByFullname(
+          searchTerm.toUpperCase()
+        );
+        setStudents(filteredStudents);
+        setLastDocument(undefined); // No es necesario el 'lastDocument' cuando estamos buscando
+        setHasMore(false); // Desactivamos la paginación mientras estamos buscando
+      } catch (error) {
+        console.error("Error al buscar estudiantes:", error);
+      } finally {
+        setIsLoading(false);
+        setIsSearching(false);
+      }
+    },
+    [fetchStudentsWithPagination]
+  );
 
-  const handleUpdateStudents = (students: Student[]) => {
+  const handleUpdateStudents = useCallback((students: Student[]) => {
     setStudents(students);
-  };
+  }, []);
 
   return {
     students,

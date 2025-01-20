@@ -3,7 +3,7 @@ import TableStudent from "./components/table-students/table-students";
 import { useDisclosure } from "@nextui-org/modal";
 import MasiveCreationModal from "./components/masive-creation-modal/masive-creation-modal";
 import { Input } from "@nextui-org/input";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import StudentModal from "./components/student-modal/student-modal";
 import useCertificateStore from "../../../store/certificates";
 import { toast, Toaster } from "sonner";
@@ -28,31 +28,43 @@ export const ListStudents = () => {
   const debouncedSearchName = useDebounce(searchName, 500);
   const { fetchCertificates, isLoadingCertificates } = useCertificateStore();
 
+  const initialLoadRef = useRef(false); // Controla si la carga inicial ya ocurrió
+  const searchRef = useRef(""); // Evita múltiples llamadas a `searchStudents`
+
   useEffect(() => {
+    // Carga inicial de estudiantes
+    if (!initialLoadRef.current) {
+      initialLoadRef.current = true;
+      fetchStudentsWithPagination(10);
+    }
+  }, [fetchStudentsWithPagination]);
+
+  useEffect(() => {
+    // Lógica de búsqueda
+    const performSearch = async () => {
+      const trimmedSearchName = debouncedSearchName.trim();
+
+      // Verificar si el término de búsqueda ha cambiado
+      if (trimmedSearchName !== searchRef.current) {
+        searchRef.current = trimmedSearchName;
+
+        // Llamar a searchStudents para que se maneje la búsqueda y la paginación
+        await searchStudents(trimmedSearchName);
+      }
+    };
+
+    // Ejecutar la búsqueda cuando cambie el término de búsqueda
+    performSearch();
+  }, [debouncedSearchName, searchStudents]);
+
+  useEffect(() => {
+    // Cargar certificados al montar el componente
     fetchCertificates();
   }, [fetchCertificates]);
 
-  useEffect(() => {
-    console.warn("DEOUNCE EN PAGINATION: ", debouncedSearchName);
-    if (
-      debouncedSearchName === null ||
-      debouncedSearchName === "" ||
-      debouncedSearchName === " "
-    ) {
-      fetchStudentsWithPagination(10);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedSearchName]);
-
-  useEffect(() => {
-    console.warn("DEOUNCE: ", debouncedSearchName);
-    searchStudents(debouncedSearchName);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedSearchName]);
-
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchName(e.target.value);
-    setStudent(null);
+    setSearchName(e.target.value); // Actualizar valor del campo de búsqueda
+    setStudent(null); // Reiniciar estudiante seleccionado
   };
 
   const handleDeleteStudentModal = async (id: string) => {
@@ -63,8 +75,8 @@ export const ListStudents = () => {
       toast.success("Estudiante eliminado correctamente");
       setStudent(null);
     } catch (error) {
-      console.log(error);
-      toast.success("Error al eliminar el estudiante");
+      console.error(error);
+      toast.error("Error al eliminar el estudiante");
       throw error;
     }
   };
@@ -85,14 +97,13 @@ export const ListStudents = () => {
   };
 
   const handleUpdateMasiveStudents = () => {
-    console.warn("LLAMANDO A PAGINACXION POR MASIVO ------");
     fetchStudentsWithPagination(10);
   };
 
   if (isLoadingCertificates)
     return (
       <article className="w-full h-full flex justify-center items-center">
-        <p>Cargando estudiantes...</p>
+        <p>Cargando...</p>
       </article>
     );
 
