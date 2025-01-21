@@ -3,7 +3,7 @@
 import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from "../firebase";
 
-export const handleLogout = async () => {
+export const handleLogout = async () => { 
   try {
     await signOut(auth);
   } catch (error) {
