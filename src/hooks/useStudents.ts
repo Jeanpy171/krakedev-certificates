@@ -57,7 +57,6 @@ export function useStudents() {
         fetchStudentsWithPagination(10, true);
         return;
       }
-
       setIsLoading(true);
       setIsSearching(true);
       try {

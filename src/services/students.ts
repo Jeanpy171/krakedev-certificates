@@ -106,18 +106,19 @@ export const handleGetAllStudentsByFullname = async (
 ): Promise<Student[]> => {
   try {
     const studentsRef = collection(db, "students");
-
-    const q = query(
-      studentsRef,
-      where("fullname", ">=", searchTerm),
-      where("fullname", "<=", searchTerm + "\uf8ff")
-    );
-
-    const querySnapshot = await getDocs(q);
-    const students: Student[] = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    })) as Student[];
+    const normalizedSearchTerm = searchTerm.trim().toLowerCase();
+    const querySnapshot = await getDocs(studentsRef);
+    const students: Student[] = querySnapshot.docs
+      .map((doc) => {
+        const data = doc.data() as Omit<Student, "id">;
+        return {
+          id: doc.id,
+          ...data,
+        };
+      })
+      .filter((student) =>
+        student.fullname.toLowerCase().startsWith(normalizedSearchTerm)
+      );
 
     return students;
   } catch (error) {
@@ -193,7 +194,6 @@ export const handleUpdateStudent = async (
     );
   }
 };
-
 
 export const handleDeleteStudent = async (id: string): Promise<void> => {
   try {
