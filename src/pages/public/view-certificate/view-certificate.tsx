@@ -113,10 +113,6 @@ const ViewCertificate = () => {
     }
   };
 
-  useEffect(() => {
-    console.warn("ESTUDIANTE: ", student);
-  }, [student]);
-
   return (
     <main className="h-full flex flex-col gap-5 justify-start items-center p-5">
       <h3 className="text-3xl font-bold">{`Bienvenido ${student.fullname}`}</h3>

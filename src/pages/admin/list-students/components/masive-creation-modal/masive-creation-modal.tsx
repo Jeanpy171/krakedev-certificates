@@ -20,7 +20,8 @@ import { generateUniqueCode } from "../../../../../utils/code";
 import { Student } from "../../../../../interface/student";
 
 interface ExcelRow {
-  DIPLOMA: string;
+  DIPLOMA?: string;
+  DIPLOMAS?: string;
   EMAIL: string;
   ESTUDIANTES?: string;
   ESTUDIANTE?: string;
@@ -59,11 +60,12 @@ const parseExcelFile = (
       const students: CreateStudent[] = [];
 
       rawJson
-        .filter(
-          (row) =>
-            row.DIPLOMA &&
-            !row.DIPLOMA.toLowerCase().includes("no recibe diploma")
-        )
+        .filter((row) => {
+          const diploma = row.DIPLOMA || row.DIPLOMAS;
+          return (
+            diploma && !diploma.toLowerCase().includes("no recibe diploma")
+          );
+        })
         .forEach((row) => {
           const fullname = row.ESTUDIANTES || row.ESTUDIANTE;
           if (!fullname) {
@@ -73,7 +75,16 @@ const parseExcelFile = (
             return;
           }
 
-          const diplomaParts = row.DIPLOMA.split(" ");
+          const diploma = row.DIPLOMA || row.DIPLOMAS;
+
+          if (!diploma) {
+            toast.error(
+              "No se encontro diploma para el estudiante, revise la columna en el excel"
+            );
+            return;
+          }
+
+          const diplomaParts = diploma.split(" ");
           const range = diplomaParts.slice(1).join(" ") || "";
 
           const certificateData = certificate?.templates.find((template) =>
