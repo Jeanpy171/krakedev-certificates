@@ -12,7 +12,6 @@ export default function Sidebar({
   const [expanded, setExpanded] = useState(true);
   const location = useLocation();
   const currentPath = location.pathname.split("/");
-  console.warn("CURRENT PATH: ", currentPath);
   return (
     <aside>
       <nav

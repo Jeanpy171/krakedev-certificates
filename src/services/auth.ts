@@ -1,12 +1,13 @@
+/* eslint-disable no-useless-catch */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from "../firebase";
 
 export const handleLogout = async () => {
   try {
     await signOut(auth);
-    console.log("User logged out successfully");
   } catch (error) {
-    console.error("Error logging out:", error);
+    //console.error("Error logging out:", error);
   }
 };
 
@@ -15,9 +16,9 @@ export const handleLogin = async (email: string, password: string) => {
     throw new Error("Necesitas proporcionar usuario y contrasenia");
   try {
     await signInWithEmailAndPassword(auth, email, password);
-    console.log("User logged in successfully");
+    //console.log("User logged in successfully");
   } catch (error) {
-    console.error("Error logging in:", error);
+    //console.error("Error logging in:", error);
     throw error;
   }
 };

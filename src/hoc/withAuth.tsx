@@ -9,14 +9,11 @@ export default function withAuth(Component: ComponentType<any>) {
     const navigate = useNavigate();
 
     useEffect(() => {
-      console.warn("ACABO DE CARGAR: ", loading);
       if (loading) return;
 
       if (user) {
-        console.log("USUARIOEN HOC: ", user);
         navigate(Routes.admin.path + Routes.admin.routes.students.path, { replace: true });
       } else {
-        console.error("mo hay usuario");
         navigate(Routes.public.path + Routes.public.routes.signin.path, {
           replace: true,
         });

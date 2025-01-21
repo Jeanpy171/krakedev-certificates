@@ -42,7 +42,6 @@ const TaskList = ({
       handleUpdate(student.id);
       toast.success("Estudiante actualizado con exito");
     } catch (error) {
-      console.log(error);
       toast.success(
         "Error al actualizar la observacion al estudiante: " + error
       );

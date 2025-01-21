@@ -40,8 +40,6 @@ const CreateStudent = () => {
         created_at: getCurrentDate(),
       };
       const newStudent = { ...student, ...certificate };
-
-      console.warn("ESTO VOY A GUARDAR EN FIREBASE: ", newStudent);
       await handleCreateStudent(newStudent);
       toast.success("Estudiante registrado con exito");
       setStudent({
@@ -53,7 +51,6 @@ const CreateStudent = () => {
         created_at: getCurrentDate(),
       });
     } catch (error) {
-      console.log(error);
       toast.success("Error al registrar al estudiante: " + error);
       throw error;
     } finally {

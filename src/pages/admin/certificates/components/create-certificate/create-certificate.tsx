@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from "react";
 import { Input } from "@nextui-org/input";
 import { Button } from "@nextui-org/button";
@@ -92,7 +93,6 @@ const CreateCertificate = () => {
     }
 
     setIsLoading(true);
-    console.warn("ESTA ES EL CERTIFICADO QUE VOY A SUBIR: ", certificate);
 
     try {
       await handleCreateCertificate(certificate);
@@ -106,7 +106,6 @@ const CreateCertificate = () => {
       });
       setCertificates([...certificates, certificate]);
     } catch (error) {
-      console.error(error);
       toast.error("Error al crear nueva certificación");
     } finally {
       setIsLoading(false);

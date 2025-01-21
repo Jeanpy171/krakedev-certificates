@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Input } from "@nextui-org/input";
 import { v4 as uuidv4 } from "uuid";
 import { Button } from "@nextui-org/button";
@@ -52,10 +52,6 @@ const CertificateList = () => {
     });
   };
 
-  useEffect(() => {
-    console.warn(selectedCertificate);
-  }, [selectedCertificate]);
-
   const addTemplate = () => {
     if (!selectedCertificate) return;
 
@@ -104,7 +100,6 @@ const CertificateList = () => {
     }
 
     setIsLoading(true);
-    console.warn("ESTA ES LA PLANTILLA QUE VOY A SUBIR: ", selectedCertificate);
     try {
       await handleUpdateCertificate(selectedCertificate?.id, {
         name: selectedCertificate.name,
@@ -114,7 +109,7 @@ const CertificateList = () => {
       fetchCertificates();
       setSelectedCertificate(null);
     } catch (error) {
-      console.error(error);
+      //console.error(error);
       toast.error("Error al actualizar la certificación");
       throw error;
     } finally {
@@ -140,7 +135,7 @@ const CertificateList = () => {
       toast.success("Certificacion eliminada correctamente");
       setSelectedCertificate(null);
     } catch (error) {
-      console.log(error);
+      //console.log(error);
       toast.success("Error al eliminar la certificacion");
       throw error;
     } finally {

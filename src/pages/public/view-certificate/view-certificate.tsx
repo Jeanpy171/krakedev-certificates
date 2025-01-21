@@ -38,7 +38,6 @@ const ViewCertificate = () => {
             const certificateData = await handleGetCertificateById(
               certificate.id_certificate
             );
-            console.warn("CERTIFICADOS COMPLETOS: ", certificateData);
 
             if (!certificateData) {
               return { ...certificate, url: "" };
@@ -47,15 +46,15 @@ const ViewCertificate = () => {
             const matchingTemplate = certificateData.templates.find(
               (template) => template.id === certificate.id_template
             );
-            console.warn("PLANTILLA DE CERTIFICADO: ", matchingTemplate);
 
             return {
               ...certificate,
               name: matchingTemplate?.certificate ?? certificate.name,
               url: matchingTemplate?.url ?? "",
             };
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           } catch (error) {
-            console.error("Error al procesar un certificado:", error);
+            //console.error("Error al procesar un certificado:", error);
             return { ...certificate, url: "" };
           }
         })
@@ -67,8 +66,9 @@ const ViewCertificate = () => {
       }));
 
       setCertificatesLoaded(true);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      console.error("Error general al cargar URLs de certificados:", error);
+      //console.error("Error general al cargar URLs de certificados:", error);
     }
   }, [certificatesLoaded, student]);
 
@@ -105,8 +105,9 @@ const ViewCertificate = () => {
       navigate(Routes.public.path + Routes.public.routes.search.path, {
         replace: true,
       });
+    // eslint-disable-next-line no-useless-catch
     } catch (error) {
-      console.warn("Error al actualizar datos del estudiante: ", error);
+      //console.warn("Error al actualizar datos del estudiante: ", error);
       throw error;
     } finally {
       setIsLoading(false);

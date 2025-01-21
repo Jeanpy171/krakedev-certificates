@@ -49,10 +49,6 @@ const StudentCertificateList = ({
   const handleCreateStudentCertificate = async () => {
     setIsLoading(true);
     try {
-      console.warn(
-        "ESTO VOY A GUARDAR EN FIREBASE: ",
-        studentData.certificates
-      );
       let updateStudentCertificates: Partial<Student> = {
         certificates: studentData.certificates,
       };
@@ -72,7 +68,6 @@ const StudentCertificateList = ({
       toast.success("Certificados del estudiante actualizados correctamente");
       onClose();
     } catch (error) {
-      console.log(error);
       toast.success("Error al actualizar los certificados del estudiante");
       throw error;
     } finally {
@@ -149,7 +144,6 @@ const StudentCertificateList = ({
                       studentCertificate.id_certificate !==
                       certificate.id_certificate
                   );
-                  console.warn("ESTO PASA SI ELIMINO: ", updatedCertificates);
                   setStudentData({
                     ...studentData,
                     certificates: updatedCertificates || [],

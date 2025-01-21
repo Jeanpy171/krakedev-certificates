@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Button } from "@nextui-org/button";
 import {
   Modal,
@@ -95,9 +96,6 @@ const parseExcelFile = (
             toast.error(
               `No se encontró un certificado para el rango: ${range}`
             );
-            console.error(
-              `No se encontró un certificado para el rango: ${range}`
-            );
             return;
           }
 
@@ -146,7 +144,6 @@ const uploadStudents = async (
   callbackUpdate: () => void
 ): Promise<void> => {
   if (!students.length) {
-    console.warn("No hay estudiantes para subir.");
     callback();
     return;
   }
@@ -154,20 +151,14 @@ const uploadStudents = async (
   try {
     await Promise.all(
       students.map((student) =>
-        handleCreateStudent(student).catch((error) => {
-          console.error(
-            `Error al subir estudiante con ID ${student.id}:`,
-            error
-          );
+        handleCreateStudent(student).catch(() => {
           return null;
         })
       )
     );
-    console.log("Todos los estudiantes se han subido exitosamente.");
     toast.success("Todos los estudiantes se han subido exitosamente.");
     callbackUpdate();
   } catch (error) {
-    console.error("Error inesperado al subir estudiantes:", error);
     toast.error("Error inesperado al subir estudiantes.");
   } finally {
     callback();
@@ -192,14 +183,9 @@ export default function MasiveCreationModal({
       const parsedStudents = await parseExcelFile(file, certificate);
       setStudents(parsedStudents);
     } catch (error) {
-      console.error("Error al procesar el archivo:", error);
       toast.error("Ocurrió un error al procesar el archivo.");
     }
   };
-
-  useEffect(() => {
-    console.warn("ESTUIDIANMTYES: ", students);
-  }, [students]);
 
   const StudentList = () => (
     <section>

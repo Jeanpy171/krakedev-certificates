@@ -1,3 +1,5 @@
+/* eslint-disable no-useless-catch */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   collection,
   doc,
@@ -24,7 +26,7 @@ export const handleGetAllCertificates = async (): Promise<
       ...doc.data(),
     })) as Certificate[];
   } catch (error) {
-    console.log("Error al traer todas los certificados" + error);
+    //console.log("Error al traer todas los certificados" + error);
     return null;
   }
 };
@@ -45,7 +47,7 @@ export const handleGetCertificateById = async (
 
     return data;
   } catch (error) {
-    console.log("Error al traer el certificado");
+    //console.log("Error al traer el certificado");
     throw error;
   }
 };
@@ -56,22 +58,17 @@ export const handleCreateCertificate = async (certificate: Certificate) => {
     if (!certificate.templates || certificate.templates.length === 0) {
       throw new Error("El certificado debe tener al menos una plantilla");
     }
-    console.warn("ESTO ME LLEGA A CREAR CERTIFICADO: ", certificate);
     const updatedCertificates = await Promise.all(
       certificate.templates.map(async (template) => {
         const { file } = template;
 
         if (file?.file) {
-          console.warn(
-            "EMPEZANDO A SUBIR LOS CERTIFICADOS A FIREBASE - - - - -"
-          );
-
           const pdfUrl = await uploadPdfToFirebase(
             file.file,
             `certificados/${template.certificate}`,
             template.range
-          ).catch((error) => {
-            console.error("Error al subir el certificado:", error);
+          ).catch(() => {
+            //console.error("Error al subir el certificado:", error);
             return null;
           });
 
@@ -94,11 +91,11 @@ export const handleCreateCertificate = async (certificate: Certificate) => {
       templates: updatedCertificates,
     };
     const certificateRef = doc(db, "certificates", certificate.id);
-    console.warn("ESTO SE VA PARA FIREBASE: ", certificateWithTemplates);
+    //console.warn("ESTO SE VA PARA FIREBASE: ", certificateWithTemplates);
     await setDoc(certificateRef, certificateWithTemplates);
     return certificateRef;
   } catch (error) {
-    console.error("Error al añadir nueva plantilla:", error);
+    //console.error("Error al añadir nueva plantilla:", error);
     throw new Error(
       `Error al añadir plantilla: ${
         error instanceof Error ? error.message : ""
@@ -124,16 +121,12 @@ export const handleUpdateCertificate = async (
         const { file } = template;
 
         if (file?.file) {
-          console.warn(
-            "EMPEZANDO A SUBIR LOS CERTIFICADOS A FIREBASE - - - - -"
-          );
-
           const pdfUrl = await uploadPdfToFirebase(
             file.file,
             `certificados/${updateCertificate.name}`,
             template.range
-          ).catch((error) => {
-            console.error("Error al subir el certificado:", error);
+          ).catch(() => {
+            //console.error("Error al subir el certificado:", error);
             return null;
           });
 
@@ -157,7 +150,6 @@ export const handleUpdateCertificate = async (
       updated_at: getCurrentDate(),
     });
   } catch (error) {
-    console.error("Error al añadir nuevas plantilla:", error);
     throw new Error(
       `Error al añadir plantilla: ${
         error instanceof Error ? error.message : ""
@@ -182,7 +174,7 @@ export const uploadPdfToFirebase = async (
     const downloadURL = await getDownloadURL(snapshot.ref);
     return downloadURL;
   } catch (error) {
-    console.error("Error al subir el archivo:", error);
+    //console.error("Error al subir el archivo:", error);
     throw new Error("Error al subir el archivo. Intenta nuevamente.");
   }
 };
@@ -198,7 +190,7 @@ export const handleUpdateStateCertificate = async (
       updated_at: getCurrentDate(),
     });
   } catch (error) {
-    console.error("Error al eliminar la certificacion:", error);
+    //console.error("Error al eliminar la certificacion:", error);
     throw error;
   }
 };

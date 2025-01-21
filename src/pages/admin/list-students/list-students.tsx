@@ -66,7 +66,7 @@ export const ListStudents = () => {
       toast.success("Estudiante eliminado correctamente");
       setStudent(null);
     } catch (error) {
-      console.error(error);
+      //console.error(error);
       toast.error("Error al eliminar el estudiante");
       throw error;
     }

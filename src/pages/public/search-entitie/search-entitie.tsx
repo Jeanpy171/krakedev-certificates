@@ -24,11 +24,9 @@ const SearchEntitie = () => {
     const email = formData.get("email");
 
     if (!email || typeof email !== "string") {
-      console.error("El campo email es requerido.");
       return;
     }
 
-    console.log("Email:", email);
     setIsLoading(true);
     try {
       const studentData = await handleGetStudentByEmail(email);

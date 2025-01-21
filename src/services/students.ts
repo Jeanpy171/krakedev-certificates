@@ -17,6 +17,7 @@ import { db } from "../firebase";
 import { CreateStudent } from "../pages/admin/list-students/components/masive-creation-modal/masive-creation-modal";
 
 export const handleGetAllStudents = async (): Promise<Student[]> => {
+  // eslint-disable-next-line no-useless-catch
   try {
     const filter = query(collection(db, "students"));
     const querySnapshot = await getDocs(filter);
@@ -25,7 +26,7 @@ export const handleGetAllStudents = async (): Promise<Student[]> => {
       ...doc.data(),
     })) as Student[];
   } catch (error) {
-    console.log("Error al traer los estudiantes");
+    //console.log("Error al traer los estudiantes");
     throw error;
   }
 };
@@ -37,6 +38,7 @@ export const handleGetStudentsWithPagination = async (
   students: Student[];
   lastDocument: QueryDocumentSnapshot<DocumentData> | null;
 }> => {
+  // eslint-disable-next-line no-useless-catch
   try {
     let filter;
     if (lastDoc) {
@@ -59,7 +61,7 @@ export const handleGetStudentsWithPagination = async (
 
     return { students, lastDocument };
   } catch (error) {
-    console.error("Error al obtener los estudiantes con paginación:", error);
+    //console.error("Error al obtener los estudiantes con paginación:", error);
     throw error;
   }
 };
@@ -71,6 +73,7 @@ export const handleGetStudentByEmail = async (
     throw new Error("Debes proporcionar el email");
   }
 
+  // eslint-disable-next-line no-useless-catch
   try {
     const filter = query(
       collection(db, "students"),
@@ -96,7 +99,7 @@ export const handleGetStudentByEmail = async (
 
     return studentDocument;
   } catch (error) {
-    console.error("Error al consultar la información del estudiante:", error);
+    //console.error("Error al consultar la información del estudiante:", error);
     throw error;
   }
 };
@@ -104,6 +107,7 @@ export const handleGetStudentByEmail = async (
 export const handleGetAllStudentsByFullname = async (
   searchTerm: string
 ): Promise<Student[]> => {
+  // eslint-disable-next-line no-useless-catch
   try {
     const studentsRef = collection(db, "students");
 
@@ -121,7 +125,7 @@ export const handleGetAllStudentsByFullname = async (
 
     return students;
   } catch (error) {
-    console.error("Error al traer los estudiantes", error);
+    //console.error("Error al traer los estudiantes", error);
     throw error;
   }
 };
@@ -133,6 +137,7 @@ export const handleCreateStudent = async (
     throw new Error("Debe proporcionar la información completa del estudiante");
   }
 
+  // eslint-disable-next-line no-useless-catch
   try {
     const existingStudent = await handleGetStudentByEmail(student.email);
 
@@ -156,7 +161,6 @@ export const handleCreateStudent = async (
 
     const studentRef = doc(db, "students", student.id);
 
-    console.info("Creando nuevo estudiante en Firebase:", student);
     const addCertificatesStudent = {
       ...student,
       certificates: [student.certificate],
@@ -167,7 +171,7 @@ export const handleCreateStudent = async (
 
     return student.id;
   } catch (error) {
-    console.error("Error al crear o actualizar estudiante:", error);
+    //console.error("Error al crear o actualizar estudiante:", error);
     throw error;
   }
 };
@@ -183,9 +187,7 @@ export const handleUpdateStudent = async (
   try {
     const studentRef = doc(db, "students", id);
     await updateDoc(studentRef, updateStudent);
-    console.info("Estudiante actualizado correctamente:", id);
   } catch (error) {
-    console.error("Error al actualizar los datos del estudiante:", error);
     throw new Error(
       `Error al actualizar los datos del estudiante: ${
         error instanceof Error ? error.message : "desconocido"
@@ -196,10 +198,11 @@ export const handleUpdateStudent = async (
 
 
 export const handleDeleteStudent = async (id: string): Promise<void> => {
+  // eslint-disable-next-line no-useless-catch
   try {
     await deleteDoc(doc(db, "students", id));
   } catch (error) {
-    console.error("Error al eliminar el estudiante:", error);
+    //console.error("Error al eliminar el estudiante:", error);
     throw error;
   }
 };

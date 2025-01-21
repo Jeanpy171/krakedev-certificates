@@ -48,6 +48,7 @@ const CertificateWritter = ({
   const generatePdf = useCallback(async () => {
     if (!url || !fullname) return;
 
+    // eslint-disable-next-line no-useless-catch
     try {
       const existingPdfBytes = await fetch(url).then((res) =>
         res.arrayBuffer()
@@ -93,7 +94,8 @@ const CertificateWritter = ({
 
       if (onSetPdf) onSetPdf(newUrlPDF);
     } catch (error) {
-      console.error("Error al generar el PDF:", error);
+      //console.error("Error al generar el PDF:", error);
+      throw error;
     }
   }, [url, fullname, onSetPdf]);
 

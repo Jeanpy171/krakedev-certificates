@@ -70,15 +70,13 @@ const CreateStudentCertificate = ({
       } else {
         updateCertificates.push(certificateData);
       }
-
-      console.warn("ESTO VOY A GUARDAR EN FIREBASE: ", updateCertificates);
       await handleUpdateStudent(student.id, {
         certificates: updateCertificates,
       });
       toast.success("Certificado del estudiante creado correctamente");
       onClose();
     } catch (error) {
-      console.log(error);
+      //console.log(error);
       toast.success("Error al crear el certificado del estudiante");
       throw error;
     } finally {

@@ -18,11 +18,9 @@ const SignIn = () => {
     const password = formData.get("password") as string;
 
     if (!email || !password) {
-      console.error("El campo email es requerido.");
       return;
     }
 
-    console.log("Email:", email);
     setIsLoading(true);
     try {
       await handleLogin(email, password);

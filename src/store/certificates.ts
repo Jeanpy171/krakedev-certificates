@@ -35,7 +35,7 @@ const useCertificateStore = create<CertificateStore>((set) => ({
         });
       }
     } catch (error) {
-      console.error("Error al cargar los certificados: " + error);
+      //console.error("Error al cargar los certificados: " + error);
       set({
         errorCertificates: "Error al cargar los certificados: " + error,
         isLoadingCertificates: false,

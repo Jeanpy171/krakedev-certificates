@@ -8,7 +8,6 @@ export default function useAuth() {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      console.warn("usuario cuando entra: ", user);
       setUser(user);
       setLoading(false);
     });

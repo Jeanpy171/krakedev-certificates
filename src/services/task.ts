@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { Student } from "../interface/student";
 import { db } from "../firebase";
@@ -14,7 +15,7 @@ export const handleGetAllTasks = async (): Promise<Student[]> => {
       ...doc.data(),
     })) as Student[];
   } catch (error) {
-    console.log("Error al traer las tareas");
+    //console.log("Error al traer las tareas");
     throw error;
   }
 };

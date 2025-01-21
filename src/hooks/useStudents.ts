@@ -17,11 +17,7 @@ export function useStudents() {
   const fetchStudentsWithPagination = useCallback(
     async (limitNumber: number, hasMoreElements?: boolean) => {
       const more = hasMoreElements ?? hasMore;
-      console.warn("SEW ACTIVA PAGINACION ===========");
-      console.warn("HAS MORE ===========", more);
-      console.warn("IS SEARCHING ===========", isSearching);
       if (!more || isSearching) return;
-      console.warn("PASE EL IF DE VALIDACION ===========");
       setIsLoading(true);
       try {
         const { students: newStudents, lastDocument: newLastDocument } =
@@ -36,11 +32,10 @@ export function useStudents() {
         });
 
         setLastDocument(newLastDocument as QueryDocumentSnapshot<DocumentData>);
-        console.warn("NUMERO DE ESTUDIANTES =====", newStudents.length);
-        console.warn("limites =====", limitNumber);
         setHasMore(newStudents.length === limitNumber);
       } catch (error) {
-        console.error("Error al cargar estudiantes con paginación:", error);
+        //console.error("Error al cargar estudiantes con paginación:", error);
+        throw new Error("Error al cargar estudiantes con paginación:" + error);
       } finally {
         setIsLoading(false);
       }
@@ -68,7 +63,8 @@ export function useStudents() {
         setLastDocument(undefined);
         setHasMore(false);
       } catch (error) {
-        console.error("Error al buscar estudiantes:", error);
+        //console.error("Error al buscar estudiantes:", error);
+        throw new Error("Error al buscar estudiantes:" + error);
       } finally {
         setIsLoading(false);
         setIsSearching(false);
