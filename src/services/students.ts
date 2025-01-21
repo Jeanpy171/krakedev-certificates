@@ -107,25 +107,25 @@ export const handleGetStudentByEmail = async (
 export const handleGetAllStudentsByFullname = async (
   searchTerm: string
 ): Promise<Student[]> => {
-  // eslint-disable-next-line no-useless-catch
   try {
     const studentsRef = collection(db, "students");
-
-    const q = query(
-      studentsRef,
-      where("fullname", ">=", searchTerm),
-      where("fullname", "<=", searchTerm + "\uf8ff")
-    );
-
-    const querySnapshot = await getDocs(q);
-    const students: Student[] = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    })) as Student[];
+    const normalizedSearchTerm = searchTerm.trim().toLowerCase();
+    const querySnapshot = await getDocs(studentsRef);
+    const students: Student[] = querySnapshot.docs
+      .map((doc) => {
+        const data = doc.data() as Omit<Student, "id">;
+        return {
+          id: doc.id,
+          ...data,
+        };
+      })
+      .filter((student) =>
+        student.fullname.toLowerCase().startsWith(normalizedSearchTerm)
+      );
 
     return students;
   } catch (error) {
-    //console.error("Error al traer los estudiantes", error);
+    console.error("Error al traer los estudiantes", error);
     throw error;
   }
 };
