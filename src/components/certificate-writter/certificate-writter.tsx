@@ -70,8 +70,8 @@ const CertificateWritter = ({
       const firstPage = pages[0];
       const { width, height } = firstPage.getSize();
 
-      const fontSize = 50;
-      const textWidth = fullname.length * fontSize * 0.4;
+      const fontSize = 45;
+      const textWidth = fullname.length * fontSize * 0.5;
       const centeredX = width / 2 - textWidth / 2;
       const centerY = height / 2;
 
