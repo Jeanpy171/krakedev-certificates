@@ -6,15 +6,31 @@ import { Button } from "@nextui-org/button";
 import CertificateWritter from "../../../../../components/certificate-writter/certificate-writter";
 import { Certificate } from "../../../../../interface/certificate";
 import { Template } from "../../../../../interface/template";
-import { Student } from "../../../../../interface/student";
+import { CertificateStudent, Student } from "../../../../../interface/student";
 import { getCurrentDate } from "../../../../../utils/date";
 import { Input } from "@nextui-org/input";
 import { v4 as uuidv4 } from "uuid";
 import { handleCreateStudent } from "../../../../../services/students";
 import { toast } from "sonner";
 import { generateUniqueCode } from "../../../../../utils/code";
+import { Timestamp } from "firebase/firestore";
 
-const CreateStudent = () => {
+export interface CreateStudent extends Partial<Student> {
+  id: string;
+  email: string;
+  fullname: string;
+  created_at: Timestamp;
+  code: string;
+  certificate?: {
+    name: string;
+    range: string;
+    id_certificate: string;
+    id_template: string;
+    created_at: Timestamp;
+  };
+}
+
+const CreateStudent: React.FC = () => {
   const [student, setStudent] = useState<Student>({
     id: uuidv4(),
     email: "",
@@ -23,6 +39,7 @@ const CreateStudent = () => {
     code: generateUniqueCode(),
     created_at: getCurrentDate(),
   });
+
   const [selectedCertificate, setSelectedCertificate] =
     useState<Certificate | null>(null);
   const [selectedTypeTemplate, setSelectedTypeTemplate] =
@@ -32,16 +49,21 @@ const CreateStudent = () => {
   const handleCreateStudentCertificate = async () => {
     setIsLoading(true);
     try {
-      const certificate = {
-        name: selectedCertificate?.name ?? "",
-        range: selectedTypeTemplate?.range ?? "",
-        id_certificate: selectedCertificate?.id ?? "",
-        id_template: selectedTypeTemplate?.id ?? "",
+      const certificate: CertificateStudent = {
+        name: selectedCertificate?.name || "",
+        range: selectedTypeTemplate?.range || "",
+        id_certificate: selectedCertificate?.id || "",
+        id_template: selectedTypeTemplate?.id || "",
         created_at: getCurrentDate(),
       };
-      const newStudent = { ...student, ...certificate };
-      await handleCreateStudent(newStudent);
-      toast.success("Estudiante registrado con exito");
+
+      const newStudent = { ...student, certificate };
+
+      console.warn("ESTO VOY A GUARDAR EN FIREBASE: ", newStudent);
+      await handleCreateStudent(newStudent as CreateStudent);
+      toast.success("Estudiante registrado con éxito");
+
+      // Reinicia el estado del estudiante
       setStudent({
         id: uuidv4(),
         email: "",
@@ -50,9 +72,13 @@ const CreateStudent = () => {
         code: generateUniqueCode(),
         created_at: getCurrentDate(),
       });
+
+      // Reinicia las selecciones
+      setSelectedCertificate(null);
+      setSelectedTypeTemplate(null);
     } catch (error) {
-      toast.success("Error al registrar al estudiante: " + error);
-      throw error;
+      console.error(error);
+      toast.error("Error al registrar al estudiante: " + error);
     } finally {
       setIsLoading(false);
     }
@@ -65,30 +91,30 @@ const CreateStudent = () => {
           <Input
             label="Nombres completos del estudiante"
             placeholder="Nombre completos del estudiante"
-            value={student?.fullname}
+            value={student.fullname}
             name="fullname"
             onChange={(e) =>
-              setStudent({
-                ...student,
-                fullname: e?.target?.value.toUpperCase(),
-              })
+              setStudent((prev) => ({
+                ...prev,
+                fullname: e.target.value.toUpperCase(),
+              }))
             }
           />
           <Input
             placeholder="Correo del estudiante"
             label="Correo del estudiante"
-            value={student?.email}
+            value={student.email}
             name="email"
             onChange={(e) =>
-              setStudent({
-                ...student,
-                email: e?.target?.value,
-              })
+              setStudent((prev) => ({
+                ...prev,
+                email: e.target.value,
+              }))
             }
           />
           <InputCertificates
             filterByActive={true}
-            value={selectedCertificate?.name}
+            value={selectedCertificate?.name || ""}
             onSelectionChange={setSelectedCertificate}
           />
 
@@ -107,8 +133,8 @@ const CreateStudent = () => {
           </Button>
         </div>
         <CertificateWritter
-          url={selectedTypeTemplate?.url ?? ""}
-          fullname={student?.fullname ?? ""}
+          url={selectedTypeTemplate?.url || ""}
+          fullname={student.fullname}
         />
       </AsideLayout>
     </article>
