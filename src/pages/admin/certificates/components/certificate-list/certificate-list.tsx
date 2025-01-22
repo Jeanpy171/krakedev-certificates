@@ -95,7 +95,10 @@ const CertificateList = () => {
     }
 
     const validateTemplatesName = selectedCertificate.templates.some(
-      (template) => template.range === "" || !template.file
+      (template) =>
+        template.range === "" ||
+        (!template.url && !template.file) ||
+        (template.url && template.file === null)
     );
 
     if (validateTemplatesName) {
@@ -157,25 +160,27 @@ const CertificateList = () => {
           onSelectionChange={setSelectedCertificate}
           className="w-1/2"
         />
-        {selectedCertificate?.is_active ? (
-          <Button
-            isLoading={isLoadingDelete}
-            isDisabled={isLoadingDelete}
-            onPress={() => handleChangeStateCertificate(false)}
-            color="danger"
-          >
-            Desactivar certificacion
-          </Button>
-        ) : (
-          <Button
-            isLoading={isLoadingDelete}
-            isDisabled={isLoadingDelete}
-            onPress={() => handleChangeStateCertificate(true)}
-            color="success"
-          >
-            Activar certificacion
-          </Button>
-        )}
+        {selectedCertificate ? (
+          selectedCertificate?.is_active ? (
+            <Button
+              isLoading={isLoadingDelete}
+              isDisabled={isLoadingDelete}
+              onPress={() => handleChangeStateCertificate(false)}
+              color="danger"
+            >
+              Desactivar certificacion
+            </Button>
+          ) : (
+            <Button
+              isLoading={isLoadingDelete}
+              isDisabled={isLoadingDelete}
+              onPress={() => handleChangeStateCertificate(true)}
+              color="success"
+            >
+              Activar certificacion
+            </Button>
+          )
+        ) : null}
       </article>
       {selectedCertificate && !selectedCertificate?.is_active && (
         <p className="text-red-400 font-semibold">
@@ -183,7 +188,7 @@ const CertificateList = () => {
           estudiante, debes actualizarla
         </p>
       )}
-      <article className="overflow-y-auto w-full grid gap-5 grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))]">
+      <article className="overflow-y-auto w-full grid gap-5 grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] place-items-center">
         {selectedCertificate?.templates ? (
           <span className="flex flex-col gap-5">
             <h5 className="font-semibold">
