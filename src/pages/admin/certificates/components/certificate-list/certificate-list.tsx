@@ -91,7 +91,10 @@ const CertificateList = () => {
     }
 
     const validateTemplatesName = selectedCertificate.templates.some(
-      (template) => template.range === "" || !template.file
+      (template) =>
+        template.range === "" ||
+        (!template.url && !template.file) ||
+        (template.url && template.file === null)
     );
 
     if (validateTemplatesName) {
@@ -152,25 +155,27 @@ const CertificateList = () => {
           onSelectionChange={setSelectedCertificate}
           className="w-1/2"
         />
-        {selectedCertificate?.is_active ? (
-          <Button
-            isLoading={isLoadingDelete}
-            isDisabled={isLoadingDelete}
-            onPress={() => handleChangeStateCertificate(false)}
-            color="danger"
-          >
-            Desactivar certificacion
-          </Button>
-        ) : (
-          <Button
-            isLoading={isLoadingDelete}
-            isDisabled={isLoadingDelete}
-            onPress={() => handleChangeStateCertificate(true)}
-            color="success"
-          >
-            Activar certificacion
-          </Button>
-        )}
+        {selectedCertificate ? (
+          selectedCertificate?.is_active ? (
+            <Button
+              isLoading={isLoadingDelete}
+              isDisabled={isLoadingDelete}
+              onPress={() => handleChangeStateCertificate(false)}
+              color="danger"
+            >
+              Desactivar certificacion
+            </Button>
+          ) : (
+            <Button
+              isLoading={isLoadingDelete}
+              isDisabled={isLoadingDelete}
+              onPress={() => handleChangeStateCertificate(true)}
+              color="success"
+            >
+              Activar certificacion
+            </Button>
+          )
+        ) : null}
       </article>
       {selectedCertificate && !selectedCertificate?.is_active && (
         <p className="text-red-400 font-semibold">
