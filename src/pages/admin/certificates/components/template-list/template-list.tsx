@@ -19,7 +19,7 @@ const TemplateList = ({
   deleteTemplate: (arg0: string) => void;
 }) => {
   return (
-    <article className="overflow-y-auto w-full grid gap-5 grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] place-items-center">
+    <article className="overflow-y-auto w-full grid gap-5 grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))]">
       {templates.length > 0 ? (
         <ul className="flex flex-wrap gap-2">
           {templates.map((template, index) => (
