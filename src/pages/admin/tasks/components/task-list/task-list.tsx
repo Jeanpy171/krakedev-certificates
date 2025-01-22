@@ -56,7 +56,7 @@ const TaskList = ({
     <article className="flex flex-col justify-center items-center h-full gap-4">
       <h3 className="font-semibold">Solicitudes de actualización de datos</h3>
       {tasks.length > 0 ? (
-        <ul className="grid gap-5 grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] w-full overflow-y-auto overflow-x-hidden">
+        <ul className="grid gap-5 grid-cols-[repeat(auto-fit,_minmax(400px,_1fr))] w-full overflow-y-auto overflow-x-hidden place-items-center">
           {tasks.map((task) => (
             <li
               key={task.id}

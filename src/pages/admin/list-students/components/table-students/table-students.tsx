@@ -22,8 +22,10 @@ const columns = [
   { name: "ESTADO", uid: "status" },
 ];
 
+type ExtendedColumnKey = keyof Student | "range";
+
 interface CustomTableProps extends TableProps {
-  handleOnChange: (arg0: Student) => void;
+  handleOnChange: (student: Student) => void;
   data: Student[];
   isLoading: boolean;
   hasMore: boolean;
@@ -38,12 +40,8 @@ export default function TableStudent({
   handleOnChange,
   ...props
 }: CustomTableProps) {
-  const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
-
   const renderCell = React.useCallback(
-    (student: Student, columnKey: string) => {
-      const cellValue = student[columnKey];
-
+    (student: Student, columnKey: ExtendedColumnKey) => {
       switch (columnKey) {
         case "email":
           return <p>{student.email}</p>;
@@ -97,7 +95,7 @@ export default function TableStudent({
         }
 
         default:
-          return cellValue;
+          return <p>{String(student[columnKey as keyof Student])}</p>;
       }
     },
     []
@@ -107,24 +105,19 @@ export default function TableStudent({
     <Table
       {...props}
       selectionMode="single"
-      selectedKeys={selectedKeys}
       bottomContent={
         hasMore && !isLoading ? (
           <div className="flex w-full justify-center">
-            {hasMore && data && (
-              <Button isDisabled={isLoading} variant="flat" onPress={loadMore}>
-                {isLoading && <Spinner color="white" size="sm" />}
-                Cargar mas
-              </Button>
-            )}
+            <Button isDisabled={isLoading} variant="flat" onPress={loadMore}>
+              {isLoading && <Spinner color="white" size="sm" />}
+              Cargar más
+            </Button>
           </div>
         ) : null
       }
       onSelectionChange={(e: Selection) => {
-        setSelectedKeys(e);
-        const selectedStudent = data.find(
-          (user) => user.id === Array.from(e)[0]
-        );
+        const selectedKey = Array.from(e)[0];
+        const selectedStudent = data.find((user) => user.id === selectedKey);
         if (selectedStudent) handleOnChange(selectedStudent);
       }}
       aria-label="Example table with custom cells"
@@ -139,12 +132,26 @@ export default function TableStudent({
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody items={data} emptyContent={"No hay estudiantes"}>
+      <TableBody items={data} emptyContent="No hay estudiantes">
         {(item) => (
           <TableRow key={item.id}>
-            {(columnKey) => (
-              <TableCell>{renderCell(item, columnKey)}</TableCell>
-            )}
+            {(columnKey) => {
+              if (
+                typeof columnKey === "string" &&
+                columns.some((col) => col.uid === columnKey)
+              ) {
+                return (
+                  <TableCell>
+                    {renderCell(item, columnKey as ExtendedColumnKey)}
+                  </TableCell>
+                );
+              }
+              return (
+                <TableCell>
+                  <span />
+                </TableCell>
+              );
+            }}
           </TableRow>
         )}
       </TableBody>
