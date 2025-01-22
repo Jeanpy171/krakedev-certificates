@@ -89,7 +89,7 @@ const parseExcelFile = (
           const range = diplomaParts.slice(1).join(" ") || "";
 
           const certificateData = certificate?.templates.find((template) =>
-            template.range.includes(range)
+            template.range.startsWith(range)
           );
 
           if (!certificateData) {
