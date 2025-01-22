@@ -8,7 +8,7 @@ import {
   ModalFooter,
   ModalProps,
 } from "@nextui-org/modal";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import * as XLSX from "xlsx";
 import { v4 as uuidv4 } from "uuid";
 import { Timestamp } from "firebase/firestore";
