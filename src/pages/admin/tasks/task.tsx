@@ -10,14 +10,18 @@ const Task = () => {
   const TabsComponent = () => {
     return (
       <Tabs aria-label="Options">
-        <Tab key="Tasks" title="Certificados">
+        <Tab key="Tasks" title="Certificados" className="h-full">
           <TaskList
             tasks={tasks}
             isLoading={isLoading}
             handleUpdateTasks={handleUpdateTasks}
           />
         </Tab>
-        <Tab key="Create new Student" title="Crear nuevo estudiante">
+        <Tab
+          key="Create new Student"
+          title="Crear nuevo estudiante"
+          className="h-full"
+        >
           <CreateStudent />
         </Tab>
       </Tabs>

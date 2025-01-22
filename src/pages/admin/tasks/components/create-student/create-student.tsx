@@ -85,7 +85,7 @@ const CreateStudent: React.FC = () => {
   };
 
   return (
-    <article className="flex flex-col h-[650px] w-full">
+    <article className="flex flex-col h-full w-full">
       <AsideLayout>
         <div className="flex flex-col gap-5">
           <Input
@@ -125,7 +125,13 @@ const CreateStudent: React.FC = () => {
           />
           <Button
             isLoading={isLoading}
-            isDisabled={isLoading}
+            isDisabled={
+              isLoading ||
+              !student.email ||
+              !student.fullname ||
+              !selectedCertificate ||
+              !selectedTypeTemplate
+            }
             color="primary"
             onPress={handleCreateStudentCertificate}
           >
