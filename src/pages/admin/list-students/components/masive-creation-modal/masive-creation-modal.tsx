@@ -86,10 +86,13 @@ const parseExcelFile = (
           }
 
           const diplomaParts = diploma.split(" ");
-          const range = diplomaParts.slice(1).join(" ") || "";
+          const range =
+            diplomaParts[0].toLowerCase() === "diploma"
+              ? diplomaParts.slice(1).join(" ")
+              : diplomaParts.join(" ");
 
-          const certificateData = certificate?.templates.find((template) =>
-            template.range.includes(range)
+          const certificateData = certificate?.templates.find(
+            (template) => template.range.toLowerCase() === range.toLowerCase()
           );
 
           if (!certificateData) {
