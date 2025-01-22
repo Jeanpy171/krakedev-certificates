@@ -105,22 +105,30 @@ export const handleGetAllStudentsByFullname = async (
   searchTerm: string
 ): Promise<Student[]> => {
   try {
-    const studentsRef = collection(db, "students");
     const normalizedSearchTerm = searchTerm.trim().toLowerCase();
-    const querySnapshot = await getDocs(studentsRef);
-    const students: Student[] = querySnapshot.docs
-      .map((doc) => {
-        const data = doc.data() as Omit<Student, "id">;
-        return {
-          id: doc.id,
-          ...data,
-        };
-      })
-      .filter((student) =>
-        student.fullname.toLowerCase().startsWith(normalizedSearchTerm)
-      );
+    const studentsRef = collection(db, "students");
 
-    return students;
+    const queries = [
+      query(studentsRef, where("fullname", ">=", searchTerm)),
+      query(studentsRef, where("fullname", "<", searchTerm + "\uf8ff")),
+    ];
+
+    const results: Student[] = [];
+
+    for (const q of queries) {
+      const snapshot = await getDocs(q);
+      snapshot.forEach((doc) => {
+        const data = doc.data() as Omit<Student, "id">;
+        if (data.fullname.toLowerCase().includes(normalizedSearchTerm)) {
+          results.push({
+            id: doc.id,
+            ...data,
+          });
+        }
+      });
+    }
+
+    return results;
   } catch (error) {
     console.error("Error al traer los estudiantes", error);
     throw error;

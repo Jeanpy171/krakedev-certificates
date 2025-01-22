@@ -34,9 +34,11 @@ const AdminLayout = (props: { children: ReactNode }) => {
   return (
     <div className="h-screen flex flex-col">
       <MainNavbar />
-      <div className="flex flex-col md:flex-row">
+      <div className="flex flex-col md:flex-row flex-1">
         <CustomSidebar modules={routes} />
-        <div className="flex-1 h-dvh">{props.children}</div>
+        <div className="flex-1 overflow-auto">
+          {props.children}
+        </div>
       </div>
     </div>
   );

@@ -63,7 +63,6 @@ const CreateStudent: React.FC = () => {
       await handleCreateStudent(newStudent as CreateStudent);
       toast.success("Estudiante registrado con éxito");
 
-      // Reinicia el estado del estudiante
       setStudent({
         id: uuidv4(),
         email: "",
@@ -73,7 +72,6 @@ const CreateStudent: React.FC = () => {
         created_at: getCurrentDate(),
       });
 
-      // Reinicia las selecciones
       setSelectedCertificate(null);
       setSelectedTypeTemplate(null);
     } catch (error) {
@@ -85,7 +83,7 @@ const CreateStudent: React.FC = () => {
   };
 
   return (
-    <article className="flex flex-col h-[650px] w-full">
+    <div className="flex flex-col h-full w-full">
       <AsideLayout>
         <div className="flex flex-col gap-5">
           <Input
@@ -125,7 +123,13 @@ const CreateStudent: React.FC = () => {
           />
           <Button
             isLoading={isLoading}
-            isDisabled={isLoading}
+            isDisabled={
+              isLoading ||
+              !student.email ||
+              !student.fullname ||
+              !selectedCertificate ||
+              !selectedTypeTemplate
+            }
             color="primary"
             onPress={handleCreateStudentCertificate}
           >
@@ -137,7 +141,7 @@ const CreateStudent: React.FC = () => {
           fullname={student.fullname}
         />
       </AsideLayout>
-    </article>
+    </div>
   );
 };
 
